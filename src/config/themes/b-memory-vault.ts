@@ -28,5 +28,4 @@ export const bMemoryVaultTheme = {
         lightCard: "#ffffff",
     },
 
-
 };
