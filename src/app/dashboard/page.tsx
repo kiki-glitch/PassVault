@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 import { bMemoryVaultTheme } from "@/config/themes";
+import { ProfileSyncTest } from "@/components/dashboard/ProfileSyncTest";
 
 export default function DashboardPage() {
   return (
@@ -27,6 +28,9 @@ export default function DashboardPage() {
             </div>
           ))}
         </section>
+
+        <ProfileSyncTest />
+        
       </div>
     </main>
   );
