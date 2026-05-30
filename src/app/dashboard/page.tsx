@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { bMemoryVaultTheme } from "@/config/themes";
 import { ProfileSyncTest } from "@/components/dashboard/ProfileSyncTest";
+import { EncryptionTest } from "@/components/dashboard/EncryptionTest";
 
 export default function DashboardPage() {
   return (
@@ -30,6 +31,7 @@ export default function DashboardPage() {
         </section>
 
         <ProfileSyncTest />
+        <EncryptionTest />
         
       </div>
     </main>
