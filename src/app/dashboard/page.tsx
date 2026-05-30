@@ -2,6 +2,7 @@ import { UserButton } from "@clerk/nextjs";
 import { bMemoryVaultTheme } from "@/config/themes";
 import { ProfileSyncTest } from "@/components/dashboard/ProfileSyncTest";
 import { EncryptionTest } from "@/components/dashboard/EncryptionTest";
+import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
 
 export default function DashboardPage() {
   return (
@@ -18,6 +19,8 @@ export default function DashboardPage() {
           <UserButton/>
         </header>
 
+        <VaultUnlockCard />
+
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {Object.values(bMemoryVaultTheme.labels).map((label) => (
             <div
@@ -32,7 +35,7 @@ export default function DashboardPage() {
 
         <ProfileSyncTest />
         <EncryptionTest />
-        
+
       </div>
     </main>
   );
