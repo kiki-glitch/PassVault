@@ -160,7 +160,7 @@ export async function encryptVaultItem({
     };
 }
 
-export async function decryptVaulIttem({
+export async function decryptVaultIttem({
     row,
     key,
 }:{

@@ -2,7 +2,7 @@
 
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { decryptVaultItem } from "@/lib/crypto/vaultCrypto";
+import { decryptVaultIttem } from "@/lib/crypto/vaultCrypto";
 import { getVaultItems, deleteVaultItem } from "@/lib/supabase/vaultItems";
 import { getVaults } from "@/lib/supabase/vaults";
 import { useVault } from "./VaultProvider";
@@ -53,7 +53,7 @@ export function VaultItemList() {
 
             const decryptedItems = await Promise.all(
                 encryptedRows.map((row) => 
-                    decryptVaultItem({
+                    decryptVaultIttem({
                         row,
                         key: vaultKey,
                     })
