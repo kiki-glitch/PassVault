@@ -5,6 +5,7 @@ import { EncryptionTest } from "@/components/dashboard/EncryptionTest";
 import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
 import { AddPasswordForm } from "@/components/vault/AddPasswordForm";
 import { VaultItemList } from "@/components/vault/VaultItemList";
+import { VaultDashboardSection } from "@/components/vault/VaultDashboardSection";
 
 export default function DashboardPage() {
   return (
@@ -22,6 +23,7 @@ export default function DashboardPage() {
         </header>
 
         <VaultUnlockCard />
+        <VaultDashboardSection/>
 
         <VaultItemList />
         <AddPasswordForm onCreated={async () => {}} />
