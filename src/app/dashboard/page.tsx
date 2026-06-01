@@ -3,6 +3,8 @@ import { bMemoryVaultTheme } from "@/config/themes";
 import { ProfileSyncTest } from "@/components/dashboard/ProfileSyncTest";
 import { EncryptionTest } from "@/components/dashboard/EncryptionTest";
 import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
+import { AddPasswordForm } from "@/components/vault/AddPasswordForm";
+import { VaultItemList } from "@/components/vault/VaultItemList";
 
 export default function DashboardPage() {
   return (
@@ -20,6 +22,9 @@ export default function DashboardPage() {
         </header>
 
         <VaultUnlockCard />
+
+        <VaultItemList />
+        <AddPasswordForm onCreated={async () => {}} />
 
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {Object.values(bMemoryVaultTheme.labels).map((label) => (
