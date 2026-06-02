@@ -3,20 +3,20 @@ import { decodeJwtPayload } from "./debugToken";
 
 export async function getFreshSupabaseToken(getToken: GetToken) {
   const token = await getToken({
+    template: "supabase",
     skipCache: true,
   });
 
   if (!token) {
-    throw new Error("Could not retrieve Clerk token for Supabase.");
+    throw new Error("Could not retrieve Clerk Supabase token.");
   }
 
   const payload = decodeJwtPayload(token);
 
-  console.log("Clerk token debug:", {
+  console.log("Supabase template token debug:", {
     sub: payload.sub,
-    iss: payload.iss,
+    role: payload.role,
     aud: payload.aud,
-    iat: payload.iat,
     exp: payload.exp,
     now: Math.floor(Date.now() / 1000),
     secondsUntilExpiry: payload.exp - Math.floor(Date.now() / 1000),
