@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { ensureUserProfile } from "@/lib/supabase/profile";
 import { createVault, getVaults } from "@/lib/supabase/vaults";
-import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 
 type TestStatus = "idle" | "loading" | "success" | "error";
 
@@ -29,25 +28,19 @@ export function ProfileSyncTest() {
       setStatus("loading");
       setMessage("Creating test vault...");
 
-      const clerkToken = await getFreshSupabaseToken(getToken);
-
-      if (!clerkToken) {
-        throw new Error("Could not retrieve Clerk token.");
-      }
-
       const profile = await ensureUserProfile({
         user,
-        clerkToken,
+        getToken,
       });
 
       await createVault({
         profileId: profile.id,
-        clerkToken,
+        getToken,
         name: "B’s First Vault",
         description: "A test vault created from the dashboard.",
       });
 
-      const updatedVaults = await getVaults(clerkToken);
+      const updatedVaults = await getVaults(getToken);
 
       setVaults(updatedVaults);
       setStatus("success");
@@ -67,18 +60,12 @@ export function ProfileSyncTest() {
         setStatus("loading");
         setMessage("Syncing profile and loading vaults...");
 
-        const clerkToken = await getToken();
-
-        if (!clerkToken) {
-          throw new Error("Could not retrieve Clerk token.");
-        }
-
         const profile = await ensureUserProfile({
           user,
-          clerkToken,
+          getToken,
         });
 
-        const existingVaults = await getVaults(clerkToken);
+        const existingVaults = await getVaults(getToken);
 
         setVaults(existingVaults);
         setStatus("success");
