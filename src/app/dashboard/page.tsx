@@ -36,7 +36,7 @@ export default function DashboardPage() {
           ))}
         </section>
 
-        <ProfileSyncTest />
+        {process.env.NODE_ENV === "development" && <ProfileSyncTest />}
         <EncryptionTest />
 
       </div>
