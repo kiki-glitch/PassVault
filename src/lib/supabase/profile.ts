@@ -1,47 +1,47 @@
 import type { UserResource } from "@clerk/nextjs/types";
+import type { GetToken } from "@clerk/nextjs/types";
+import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 import { createSupabaseBrowserClient } from "./client";
 
-type EnsureProfileParams = {
-  user: UserResource;
-  clerkToken: string;
-};
-
 export async function ensureUserProfile({
-    user,
-    clerkToken
-}: EnsureProfileParams){
+  user,
+  getToken,
+}: {
+  user: UserResource;
+  getToken: GetToken;
+}) {
+  const clerkToken = await getFreshSupabaseToken(getToken);
+  const supabase = createSupabaseBrowserClient(clerkToken);
 
-    const supabase = createSupabaseBrowserClient(clerkToken);
+  const email = user.primaryEmailAddress?.emailAddress ?? null;
 
-    const email = user.primaryEmailAddress?.emailAddress ?? null;
-
-    const { data: existingProfile, error: selectError } = await supabase
+  const { data: existingProfile, error: selectError } = await supabase
     .from("profiles")
     .select("*")
     .eq("clerk_user_id", user.id)
     .maybeSingle();
 
-     if (selectError) {
-        throw selectError;
-    }
+  if (selectError) {
+    throw selectError;
+  }
 
-    if (existingProfile) {
-        return existingProfile;
-    }
+  if (existingProfile) {
+    return existingProfile;
+  }
 
-    const { data: newProfile, error: insertError } = await supabase
-        .from("profiles")
-        .insert({
-            clerk_user_id: user.id,
-            email,
-            display_name: user.fullName ?? user.username ?? "B",
-        })
-        .select("*")
-        .single();
-    
-    if(insertError){
-        throw insertError;
-    }
+  const { data: newProfile, error: insertError } = await supabase
+    .from("profiles")
+    .insert({
+      clerk_user_id: user.id,
+      email,
+      display_name: user.fullName ?? user.username ?? "B",
+    })
+    .select("*")
+    .single();
 
-    return newProfile;
+  if (insertError) {
+    throw insertError;
+  }
+
+  return newProfile;
 }

@@ -1,65 +1,69 @@
+import type { GetToken } from "@clerk/nextjs/types";
+import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 import { createSupabaseBrowserClient } from "./client";
 import type { EncryptedVaultItemInsert, VaultItemRow } from "@/types/vault";
 
-type CreateVaultItemParams = {
-  clerkToken: string;
-  item: EncryptedVaultItemInsert;
-};
+async function createAuthedSupabaseClient(getToken: GetToken) {
+  const clerkToken = await getFreshSupabaseToken(getToken);
+  return createSupabaseBrowserClient(clerkToken);
+}
 
 export async function createVaultItem({
-    clerkToken,
-    item,
-}: CreateVaultItemParams) {
-    const supabase = createSupabaseBrowserClient(clerkToken)
+  getToken,
+  item,
+}: {
+  getToken: GetToken;
+  item: EncryptedVaultItemInsert;
+}) {
+  const supabase = await createAuthedSupabaseClient(getToken);
 
-    const { data, error} = await supabase
-        .from("vault_items")
-        .insert(item)
-        .select("*")
-        .single();
-    
-    if (error) {
-        throw error;
-    }
+  const { data, error } = await supabase
+    .from("vault_items")
+    .insert(item)
+    .select("*")
+    .single();
 
-    return data as VaultItemRow;
+  if (error) {
+    throw error;
+  }
+
+  return data as VaultItemRow;
 }
 
 export async function getVaultItems({
-    clerkToken,
-    vaultId,
-}:{
-    clerkToken: string;
-    vaultId: string;
-}){
-    const supabse = createSupabaseBrowserClient(clerkToken)
+  getToken,
+  vaultId,
+}: {
+  getToken: GetToken;
+  vaultId: string;
+}) {
+  const supabase = await createAuthedSupabaseClient(getToken);
 
-    const {data, error} = await supabse
-        .from("vault_items")
-        .select("*")
-        .eq("vault_id", vaultId)
-        .order("created_at", { ascending: false})
+  const { data, error } = await supabase
+    .from("vault_items")
+    .select("*")
+    .eq("vault_id", vaultId)
+    .order("created_at", { ascending: false });
 
-    if (error){
-        throw error;
-    }
+  if (error) {
+    throw error;
+  }
 
-    return data as VaultItemRow[];
-
+  return data as VaultItemRow[];
 }
 
 export async function deleteVaultItem({
-    clerkToken,
-    itemId,
+  getToken,
+  itemId,
 }: {
-    clerkToken: string;
-    itemId:string;
+  getToken: GetToken;
+  itemId: string;
 }) {
-    const supabase = createSupabaseBrowserClient(clerkToken)
+  const supabase = await createAuthedSupabaseClient(getToken);
 
-    const {error} = await supabase.from("vault_items").delete().eq("id", itemId);
+  const { error } = await supabase.from("vault_items").delete().eq("id", itemId);
 
-    if (error){
-        throw error;
-    }
+  if (error) {
+    throw error;
+  }
 }

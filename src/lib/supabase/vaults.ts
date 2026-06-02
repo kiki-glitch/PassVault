@@ -1,19 +1,24 @@
+import type { GetToken } from "@clerk/nextjs/types";
+import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 import { createSupabaseBrowserClient } from "./client";
 
-type CreateVaultParams = {
-  profileId: string;
-  clerkToken: string;
-  name: string;
-  description?: string;
-};
+async function createAuthedSupabaseClient(getToken: GetToken) {
+  const clerkToken = await getFreshSupabaseToken(getToken);
+  return createSupabaseBrowserClient(clerkToken);
+}
 
 export async function createVault({
   profileId,
-  clerkToken,
+  getToken,
   name,
   description,
-}: CreateVaultParams) {
-  const supabase = createSupabaseBrowserClient(clerkToken);
+}: {
+  profileId: string;
+  getToken: GetToken;
+  name: string;
+  description?: string;
+}) {
+  const supabase = await createAuthedSupabaseClient(getToken);
 
   const { data, error } = await supabase
     .from("vaults")
@@ -32,8 +37,8 @@ export async function createVault({
   return data;
 }
 
-export async function getVaults(clerkToken: string) {
-  const supabase = createSupabaseBrowserClient(clerkToken);
+export async function getVaults(getToken: GetToken) {
+  const supabase = await createAuthedSupabaseClient(getToken);
 
   const { data, error } = await supabase
     .from("vaults")
