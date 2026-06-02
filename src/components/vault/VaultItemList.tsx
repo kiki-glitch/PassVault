@@ -7,6 +7,7 @@ import { getVaultItems, deleteVaultItem } from "@/lib/supabase/vaultItems";
 import { getVaults } from "@/lib/supabase/vaults";
 import { useVault } from "./VaultProvider";
 import type { DecryptedVaultItem } from "@/types/vault";
+import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 
 export function VaultItemList() {
     const {user, isLoaded} = useUser();
@@ -30,7 +31,7 @@ export function VaultItemList() {
         try{
             setMessage("Loading encrypted passwords...");
 
-            const clerkToken = await getToken();
+            const clerkToken = await getFreshSupabaseToken(getToken);
 
             if(!clerkToken) {
                 throw new Error("Could not retrieve Clerk token.")
@@ -76,7 +77,7 @@ export function VaultItemList() {
 
     async function handleDelete(itemId: string) {
         try{
-            const clerkToken = await getToken();
+            const clerkToken = await getFreshSupabaseToken(getToken);
 
             if(!clerkToken) {
                 throw new Error("Could not retrieve CLerk token");

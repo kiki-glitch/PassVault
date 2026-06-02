@@ -8,6 +8,7 @@ import { createVaultItem } from "@/lib/supabase/vaultItems";
 import { encryptVaultItem } from "@/lib/crypto/vaultCrypto";
 import { useVault } from "./VaultProvider";
 import type { VaultItemFormValues } from "@/types/vault";
+import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 
 const initialFormValues: VaultItemFormValues = {
     title: "",
@@ -75,7 +76,7 @@ export function AddPasswordForm({
             setIsSaving(true);
             setMessage("Encrypting and saving password...");
 
-            const clerkToken = await getToken();
+            const clerkToken = await getFreshSupabaseToken(getToken);
 
             if (!clerkToken){
                 throw new Error("Could not retrieve Clerk Token")

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { ensureUserProfile } from "@/lib/supabase/profile";
 import { createVault, getVaults } from "@/lib/supabase/vaults";
+import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
 
 type TestStatus = "idle" | "loading" | "success" | "error";
 
@@ -28,7 +29,7 @@ export function ProfileSyncTest() {
       setStatus("loading");
       setMessage("Creating test vault...");
 
-      const clerkToken = await getToken();
+      const clerkToken = await getFreshSupabaseToken(getToken);
 
       if (!clerkToken) {
         throw new Error("Could not retrieve Clerk token.");
