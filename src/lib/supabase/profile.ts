@@ -1,7 +1,5 @@
-import type { UserResource } from "@clerk/nextjs/types";
-import type { GetToken } from "@clerk/nextjs/types";
-import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
-import { createSupabaseBrowserClient } from "./client";
+import type { GetToken, UserResource } from "@clerk/nextjs/types";
+import { withSupabaseAuthRetry } from "../clerk/withSupabaseAuthRetry";
 
 export async function ensureUserProfile({
   user,
@@ -10,16 +8,17 @@ export async function ensureUserProfile({
   user: UserResource;
   getToken: GetToken;
 }) {
-  const clerkToken = await getFreshSupabaseToken(getToken);
-  const supabase = createSupabaseBrowserClient(clerkToken);
-
   const email = user.primaryEmailAddress?.emailAddress ?? null;
 
-  const { data: existingProfile, error: selectError } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("clerk_user_id", user.id)
-    .maybeSingle();
+  // Added async/await to the select query wrapper
+  const { data: existingProfile, error: selectError } =
+    await withSupabaseAuthRetry(getToken, async (supabase) =>
+      await supabase
+        .from("profiles")
+        .select("*")
+        .eq("clerk_user_id", user.id)
+        .maybeSingle()
+    );
 
   if (selectError) {
     throw selectError;
@@ -29,15 +28,19 @@ export async function ensureUserProfile({
     return existingProfile;
   }
 
-  const { data: newProfile, error: insertError } = await supabase
-    .from("profiles")
-    .insert({
-      clerk_user_id: user.id,
-      email,
-      display_name: user.fullName ?? user.username ?? "B",
-    })
-    .select("*")
-    .single();
+  // Added async/await to the insert query wrapper
+  const { data: newProfile, error: insertError } =
+    await withSupabaseAuthRetry(getToken, async (supabase) =>
+      await supabase
+        .from("profiles")
+        .insert({
+          clerk_user_id: user.id,
+          email,
+          display_name: user.fullName ?? user.username ?? "B",
+        })
+        .select("*")
+        .single()
+    );
 
   if (insertError) {
     throw insertError;

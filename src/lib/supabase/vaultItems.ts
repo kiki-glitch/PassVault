@@ -1,12 +1,6 @@
 import type { GetToken } from "@clerk/nextjs/types";
-import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
-import { createSupabaseBrowserClient } from "./client";
+import { withSupabaseAuthRetry } from "../clerk/withSupabaseAuthRetry";
 import type { EncryptedVaultItemInsert, VaultItemRow } from "@/types/vault";
-
-async function createAuthedSupabaseClient(getToken: GetToken) {
-  const clerkToken = await getFreshSupabaseToken(getToken);
-  return createSupabaseBrowserClient(clerkToken);
-}
 
 export async function createVaultItem({
   getToken,
@@ -15,16 +9,17 @@ export async function createVaultItem({
   getToken: GetToken;
   item: EncryptedVaultItemInsert;
 }) {
-  const supabase = await createAuthedSupabaseClient(getToken);
-
-  const { data, error } = await supabase
-    .from("vault_items")
-    .insert(item)
-    .select("*")
-    .single();
+  const { data, error } = await withSupabaseAuthRetry(getToken, async (supabase) =>
+    await supabase.from("vault_items").insert(item).select("*").single()
+  );
 
   if (error) {
     throw error;
+  }
+
+  // Safe guard clause: ensures data exists before casting
+  if (!data) {
+    throw new Error("Failed to create vault item: No data returned.");
   }
 
   return data as VaultItemRow;
@@ -37,19 +32,20 @@ export async function getVaultItems({
   getToken: GetToken;
   vaultId: string;
 }) {
-  const supabase = await createAuthedSupabaseClient(getToken);
-
-  const { data, error } = await supabase
-    .from("vault_items")
-    .select("*")
-    .eq("vault_id", vaultId)
-    .order("created_at", { ascending: false });
+  const { data, error } = await withSupabaseAuthRetry(getToken, async (supabase) =>
+    await supabase
+      .from("vault_items")
+      .select("*")
+      .eq("vault_id", vaultId)
+      .order("created_at", { ascending: false })
+  );
 
   if (error) {
     throw error;
   }
 
-  return data as VaultItemRow[];
+  // TypeScript allows casting arrays safely because of the fallback array
+  return (data ?? []) as VaultItemRow[];
 }
 
 export async function deleteVaultItem({
@@ -59,9 +55,9 @@ export async function deleteVaultItem({
   getToken: GetToken;
   itemId: string;
 }) {
-  const supabase = await createAuthedSupabaseClient(getToken);
-
-  const { error } = await supabase.from("vault_items").delete().eq("id", itemId);
+  const { error } = await withSupabaseAuthRetry(getToken, async (supabase) =>
+    await supabase.from("vault_items").delete().eq("id", itemId)
+  );
 
   if (error) {
     throw error;
