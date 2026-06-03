@@ -54,3 +54,19 @@ export type DecryptedVaultItem = {
   favorite: boolean;
   createdAt: string;
 };
+
+export type EncryptedVaultItemUpdate = {
+  title_ciphertext: string;
+  username_ciphertext: string | null;
+  password_ciphertext: string | null;
+  url_ciphertext: string | null;
+  notes_ciphertext: string | null;
+  title_iv: string;
+  username_iv: string | null;
+  password_iv: string | null;
+  url_iv: string | null;
+  notes_iv: string | null;
+  salt: string;
+  favorite: boolean;
+  updated_at: string;
+};
