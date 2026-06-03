@@ -1,3 +1,10 @@
+import type {
+  DecryptedVaultItem,
+  EncryptedVaultItemInsert,
+  VaultItemFormValues,
+  VaultItemRow,
+} from "@/types/vault";
+
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
@@ -98,4 +105,116 @@ export async function decryptText({
     );
 
     return textDecoder.decode(decryptedBuffer);
+}
+
+
+type EncryptVaultItemParams = {
+    values: VaultItemFormValues;
+    key: CryptoKey
+    ownerId: string;
+    vaultId:string;
+    salt: string;
+}
+
+export async function encryptVaultItem({
+    values,
+    key,
+    ownerId,
+    vaultId,
+    salt,
+}: EncryptVaultItemParams): Promise<EncryptedVaultItemInsert> {
+    const encryptedTitle = await encryptText(values.title, key);
+
+    const encryptedUsername = values.username
+        ? await encryptText(values.username, key)
+        : null;
+    
+    const encryptedPassword = values.password
+        ? await encryptText(values.password, key)
+        : null;
+
+    const encryptedUrl = values.url ? await encryptText(values.url, key) : null
+
+    const encryptedNotes = values.notes
+        ? await encryptText(values.notes, key)
+        : null;
+    
+    return {
+        owner_id: ownerId,
+        vault_id: vaultId,
+
+        title_ciphertext: encryptedTitle.ciphertext,
+        username_ciphertext: encryptedUsername?.ciphertext ?? null,
+        password_ciphertext: encryptedPassword?.ciphertext ?? null,
+        url_ciphertext: encryptedUrl?.ciphertext ?? null,
+        notes_ciphertext: encryptedNotes?.ciphertext ?? null,
+
+        title_iv: encryptedTitle.iv,
+        username_iv: encryptedUsername?.iv ?? null,
+        password_iv: encryptedPassword?.iv ?? null,
+        url_iv: encryptedUrl?.iv ?? null,
+        notes_iv: encryptedNotes?.iv ?? null,
+
+        salt,
+        favorite: values.favorite,
+    };
+}
+
+export async function decryptVaultItem({
+    row,
+    key,
+}:{
+    row: VaultItemRow;
+    key: CryptoKey;
+}): Promise<DecryptedVaultItem> {
+    const title = row.title_ciphertext && row.title_iv
+        ? await decryptText({
+            ciphertext: row.title_ciphertext,
+            iv: row.title_iv,
+            key,
+        })
+        :"";
+    
+    const username = row.username_ciphertext && row.username_iv
+      ? await decryptText({
+          ciphertext: row.username_ciphertext,
+          iv: row.username_iv,
+          key,
+        })
+      : "";
+    
+    const password = row.password_ciphertext && row.password_iv
+      ? await decryptText({
+          ciphertext: row.password_ciphertext,
+          iv: row.password_iv,
+          key,
+        })
+      : "";
+
+    const url = row.url_ciphertext && row.url_iv
+      ? await decryptText({
+          ciphertext: row.url_ciphertext,
+          iv: row.url_iv,
+          key,
+        })
+      : "";
+
+    const notes = row.notes_ciphertext && row.notes_iv
+      ? await decryptText({
+          ciphertext: row.notes_ciphertext,
+          iv: row.notes_iv,
+          key,
+        })
+      : "";
+
+    return {
+        id: row.id,
+        title,
+        username,
+        password,
+        url,
+        notes,
+        favorite: row.favorite,
+        createdAt: row.created_at,
+    };
 }
