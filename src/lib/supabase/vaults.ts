@@ -1,5 +1,5 @@
 import type { GetToken } from "@clerk/nextjs/types";
-import { withSupabaseAuthRetry } from "../clerk/withSupabaseAuthRetry";
+import { withSupabaseAuthRetry } from "./withSupabaseAuthRetry";
 
 export type VaultRow = {
   id: string;

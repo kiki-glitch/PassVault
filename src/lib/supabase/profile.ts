@@ -1,5 +1,5 @@
 import type { GetToken, UserResource } from "@clerk/nextjs/types";
-import { withSupabaseAuthRetry } from "../clerk/withSupabaseAuthRetry";
+import { withSupabaseAuthRetry } from "./withSupabaseAuthRetry";
 
 export type ProfileRow = {
   id: string;
