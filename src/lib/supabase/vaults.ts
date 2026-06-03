@@ -1,48 +1,64 @@
-import { createSupabaseBrowserClient } from "./client";
+import type { GetToken } from "@clerk/nextjs/types";
+import { withSupabaseAuthRetry } from "./withSupabaseAuthRetry";
 
-type CreateVaultParams = {
-  profileId: string;
-  clerkToken: string;
+export type VaultRow = {
+  id: string;
+  owner_id: string;
   name: string;
-  description?: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 export async function createVault({
   profileId,
-  clerkToken,
+  getToken,
   name,
   description,
-}: CreateVaultParams) {
-  const supabase = createSupabaseBrowserClient(clerkToken);
-
-  const { data, error } = await supabase
-    .from("vaults")
-    .insert({
-      owner_id: profileId,
-      name,
-      description,
-    })
-    .select("*")
-    .single();
+}: {
+  profileId: string;
+  getToken: GetToken;
+  name: string;
+  description?: string;
+}): Promise<VaultRow> {
+  const { data, error } = await withSupabaseAuthRetry<VaultRow>(
+    getToken,
+    async (supabase) =>
+      supabase
+        .from("vaults")
+        .insert({
+          owner_id: profileId,
+          name,
+          description,
+        })
+        .select("*")
+        .single()
+  );
 
   if (error) {
     throw error;
+  }
+
+  if (!data) {
+    throw new Error("Failed to create vault: No data returned.");
   }
 
   return data;
 }
 
-export async function getVaults(clerkToken: string) {
-  const supabase = createSupabaseBrowserClient(clerkToken);
-
-  const { data, error } = await supabase
-    .from("vaults")
-    .select("*")
-    .order("created_at", { ascending: false });
+export async function getVaults(getToken: GetToken): Promise<VaultRow[]> {
+  const { data, error } = await withSupabaseAuthRetry<VaultRow[]>(
+    getToken,
+    async (supabase) =>
+      supabase
+        .from("vaults")
+        .select("*")
+        .order("created_at", { ascending: false })
+  );
 
   if (error) {
     throw error;
   }
 
-  return data;
+  return data ?? [];
 }
