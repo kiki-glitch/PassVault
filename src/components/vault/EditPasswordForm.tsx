@@ -46,11 +46,11 @@ export function EditPasswordForm({
     function handleGeneratePassword() {
         try {
             const password = generatePassword({
-            length: 18,
-            includeUppercase: true,
-            includeLowercase: true,
-            includeNumbers: true,
-            includeSymbols: true,
+                length: 18,
+                includeUppercase: true,
+                includeLowercase: true,
+                includeNumbers: true,
+                includeSymbols: true,
             });
 
             updateField("password", password);
