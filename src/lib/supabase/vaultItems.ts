@@ -8,21 +8,22 @@ export async function createVaultItem({
 }: {
   getToken: GetToken;
   item: EncryptedVaultItemInsert;
-}) {
-  const { data, error } = await withSupabaseAuthRetry(getToken, async (supabase) =>
-    await supabase.from("vault_items").insert(item).select("*").single()
+}): Promise<VaultItemRow> {
+  const { data, error } = await withSupabaseAuthRetry<VaultItemRow>(
+    getToken,
+    async (supabase) =>
+      supabase.from("vault_items").insert(item).select("*").single()
   );
 
   if (error) {
     throw error;
   }
 
-  // Safe guard clause: ensures data exists before casting
   if (!data) {
     throw new Error("Failed to create vault item: No data returned.");
   }
 
-  return data as VaultItemRow;
+  return data;
 }
 
 export async function getVaultItems({
@@ -31,21 +32,22 @@ export async function getVaultItems({
 }: {
   getToken: GetToken;
   vaultId: string;
-}) {
-  const { data, error } = await withSupabaseAuthRetry(getToken, async (supabase) =>
-    await supabase
-      .from("vault_items")
-      .select("*")
-      .eq("vault_id", vaultId)
-      .order("created_at", { ascending: false })
+}): Promise<VaultItemRow[]> {
+  const { data, error } = await withSupabaseAuthRetry<VaultItemRow[]>(
+    getToken,
+    async (supabase) =>
+      supabase
+        .from("vault_items")
+        .select("*")
+        .eq("vault_id", vaultId)
+        .order("created_at", { ascending: false })
   );
 
   if (error) {
     throw error;
   }
 
-  // TypeScript allows casting arrays safely because of the fallback array
-  return (data ?? []) as VaultItemRow[];
+  return data ?? [];
 }
 
 export async function deleteVaultItem({
@@ -54,9 +56,11 @@ export async function deleteVaultItem({
 }: {
   getToken: GetToken;
   itemId: string;
-}) {
-  const { error } = await withSupabaseAuthRetry(getToken, async (supabase) =>
-    await supabase.from("vault_items").delete().eq("id", itemId)
+}): Promise<void> {
+  const { error } = await withSupabaseAuthRetry<null>(
+    getToken,
+    async (supabase) =>
+      supabase.from("vault_items").delete().eq("id", itemId)
   );
 
   if (error) {

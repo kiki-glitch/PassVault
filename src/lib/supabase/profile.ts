@@ -1,19 +1,28 @@
 import type { GetToken, UserResource } from "@clerk/nextjs/types";
 import { withSupabaseAuthRetry } from "../clerk/withSupabaseAuthRetry";
 
+export type ProfileRow = {
+  id: string;
+  clerk_user_id: string;
+  email: string | null;
+  display_name: string | null;
+  plan: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export async function ensureUserProfile({
   user,
   getToken,
 }: {
   user: UserResource;
   getToken: GetToken;
-}) {
+}): Promise<ProfileRow> {
   const email = user.primaryEmailAddress?.emailAddress ?? null;
 
-  // Added async/await to the select query wrapper
   const { data: existingProfile, error: selectError } =
-    await withSupabaseAuthRetry(getToken, async (supabase) =>
-      await supabase
+    await withSupabaseAuthRetry<ProfileRow>(getToken, async (supabase) =>
+      supabase
         .from("profiles")
         .select("*")
         .eq("clerk_user_id", user.id)
@@ -28,10 +37,9 @@ export async function ensureUserProfile({
     return existingProfile;
   }
 
-  // Added async/await to the insert query wrapper
   const { data: newProfile, error: insertError } =
-    await withSupabaseAuthRetry(getToken, async (supabase) =>
-      await supabase
+    await withSupabaseAuthRetry<ProfileRow>(getToken, async (supabase) =>
+      supabase
         .from("profiles")
         .insert({
           clerk_user_id: user.id,
@@ -44,6 +52,10 @@ export async function ensureUserProfile({
 
   if (insertError) {
     throw insertError;
+  }
+
+  if (!newProfile) {
+    throw new Error("Failed to create profile: No data returned.");
   }
 
   return newProfile;
