@@ -7,6 +7,7 @@ export type ProfileRow = {
   email: string | null;
   display_name: string | null;
   plan: string;
+  vault_salt: string | null;
   created_at: string;
   updated_at: string;
 };
