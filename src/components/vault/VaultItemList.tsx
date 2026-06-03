@@ -7,6 +7,7 @@ import { getVaultItems, deleteVaultItem } from "@/lib/supabase/vaultItems";
 import { getVaults } from "@/lib/supabase/vaults";
 import { useVault } from "./VaultProvider";
 import type { DecryptedVaultItem } from "@/types/vault";
+import { EditPasswordForm } from "./EditPasswordForm";
 
 export function VaultItemList() {
   const { user, isLoaded } = useUser();
@@ -19,6 +20,7 @@ export function VaultItemList() {
     null
   );
   const [refreshKey, setRefreshKey] = useState(0);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
 
   async function loadItems() {
     if (!isLoaded || !user) return;
@@ -76,7 +78,10 @@ export function VaultItemList() {
         itemId,
       });
 
+      setVisiblePasswordId(null);
+      setEditingItemId(null);
       setRefreshKey((current) => current + 1);
+      setMessage("Password deleted.");
     } catch (error) {
       console.error("Delete item failed:", error);
       setMessage("Could not delete password.");
@@ -108,6 +113,22 @@ export function VaultItemList() {
       <div className="mt-6 grid gap-4">
         {items.map((item) => {
           const isPasswordVisible = visiblePasswordId === item.id;
+
+          if (editingItemId === item.id) {
+            return (
+              <EditPasswordForm
+                key={item.id}
+                item={item}
+                onCancel={() => setEditingItemId(null)}
+                onUpdated={async () => {
+                  setEditingItemId(null);
+                  setVisiblePasswordId(null);
+                  setRefreshKey((current) => current + 1);
+                  setMessage("Password updated securely.");
+                }}
+              />
+            );
+          }
 
           return (
             <div
@@ -151,6 +172,14 @@ export function VaultItemList() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingItemId(item.id)}
+                    className="rounded-full border border-pink-300/30 px-4 py-2 text-xs font-semibold text-pink-200 hover:bg-pink-300/10"
+                  >
+                    Edit
+                  </button>
+
                   <button
                     type="button"
                     onClick={() =>
