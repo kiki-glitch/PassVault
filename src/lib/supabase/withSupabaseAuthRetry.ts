@@ -1,8 +1,6 @@
 import type { GetToken } from "@clerk/nextjs/types";
-import { getFreshSupabaseToken } from "@/lib/clerk/getSupabaseToken";
-import { createSupabaseBrowserClient } from "../supabase/client";
 import type { SupabaseClient } from "@supabase/supabase-js";
-
+import { createAuthenticatedSupabaseClient } from "./authenticatedClient";
 
 type SupabaseError = {
   code?: string;
@@ -28,19 +26,13 @@ export async function withSupabaseAuthRetry<T>(
   getToken: GetToken,
   action: (supabase: SupabaseClient) => Promise<SupabaseResult<T>>
 ): Promise<SupabaseResult<T>> {
-  let token = await getFreshSupabaseToken(getToken);
-  let supabase = createSupabaseBrowserClient(token);
+  const firstClient = createAuthenticatedSupabaseClient(getToken);
+  const firstResult = await action(firstClient);
 
-  let result = await action(supabase);
-
-  if (!isJwtAuthError(result.error)) {
-    return result;
+  if (!isJwtAuthError(firstResult.error)) {
+    return firstResult;
   }
 
-  token = await getFreshSupabaseToken(getToken);
-  supabase = createSupabaseBrowserClient(token);
-
-  result = await action(supabase);
-
-  return result;
+  const secondClient = createAuthenticatedSupabaseClient(getToken);
+  return action(secondClient);
 }
