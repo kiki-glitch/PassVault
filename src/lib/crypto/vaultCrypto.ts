@@ -1,6 +1,7 @@
 import type {
   DecryptedVaultItem,
   EncryptedVaultItemInsert,
+  EncryptedVaultItemUpdate,
   VaultItemFormValues,
   VaultItemRow,
 } from "@/types/vault";
@@ -217,4 +218,48 @@ export async function decryptVaultItem({
         favorite: row.favorite,
         createdAt: row.created_at,
     };
+}
+
+export async function encryptVaultItemUpdate({
+  values,
+  key,
+  salt,
+}: {
+  values: VaultItemFormValues;
+  key: CryptoKey;
+  salt: string;
+}): Promise<EncryptedVaultItemUpdate> {
+  const encryptedTitle = await encryptText(values.title, key);
+
+  const encryptedUsername = values.username
+    ? await encryptText(values.username, key)
+    : null;
+
+  const encryptedPassword = values.password
+    ? await encryptText(values.password, key)
+    : null;
+
+  const encryptedUrl = values.url ? await encryptText(values.url, key) : null;
+
+  const encryptedNotes = values.notes
+    ? await encryptText(values.notes, key)
+    : null;
+
+  return {
+    title_ciphertext: encryptedTitle.ciphertext,
+    username_ciphertext: encryptedUsername?.ciphertext ?? null,
+    password_ciphertext: encryptedPassword?.ciphertext ?? null,
+    url_ciphertext: encryptedUrl?.ciphertext ?? null,
+    notes_ciphertext: encryptedNotes?.ciphertext ?? null,
+
+    title_iv: encryptedTitle.iv,
+    username_iv: encryptedUsername?.iv ?? null,
+    password_iv: encryptedPassword?.iv ?? null,
+    url_iv: encryptedUrl?.iv ?? null,
+    notes_iv: encryptedNotes?.iv ?? null,
+
+    salt,
+    favorite: values.favorite,
+    updated_at: new Date().toISOString(),
+  };
 }
