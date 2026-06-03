@@ -7,6 +7,7 @@ export type ProfileRow = {
   email: string | null;
   display_name: string | null;
   plan: string;
+  vault_salt: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -59,4 +60,38 @@ export async function ensureUserProfile({
   }
 
   return newProfile;
+}
+
+export async function updateUserVaultSalt({
+  profileId,
+  vaultSalt,
+  getToken,
+}: {
+  profileId: string;
+  vaultSalt: string;
+  getToken: GetToken;
+}): Promise<ProfileRow> {
+  const { data, error } = await withSupabaseAuthRetry<ProfileRow>(
+    getToken,
+    async (supabase) =>
+      supabase
+        .from("profiles")
+        .update({
+          vault_salt: vaultSalt,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", profileId)
+        .select("*")
+        .single()
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error("Failed to update vault salt: No data returned.");
+  }
+
+  return data;
 }
