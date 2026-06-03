@@ -8,6 +8,7 @@ import { createVaultItem } from "@/lib/supabase/vaultItems";
 import { encryptVaultItem } from "@/lib/crypto/vaultCrypto";
 import { useVault } from "./VaultProvider";
 import type { VaultItemFormValues } from "@/types/vault";
+import { generatePassword } from "@/lib/crypto/passwordGenerator";
 
 const initialFormValues: VaultItemFormValues = {
   title: "",
@@ -54,6 +55,24 @@ export function AddPasswordForm({
       name: "B’s Main Vault",
       description: "Default vault for saved keys.",
     });
+  }
+
+  function handleGeneratePassword() {
+    try {
+      const password = generatePassword({
+        length: 18,
+        includeUppercase: true,
+        includeLowercase: true,
+        includeNumbers: true,
+        includeSymbols: true,
+      });
+
+      updateField("password", password);
+      setMessage("Strong password generated locally.");
+    } catch (error) {
+      console.error("Generate password failed:", error);
+      setMessage("Could not generate password.");
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -145,13 +164,24 @@ export function AddPasswordForm({
 
         <label className="grid gap-2">
           <span className="text-sm text-slate-300">Password</span>
-          <input
-            type="password"
-            value={values.password}
-            onChange={(event) => updateField("password", event.target.value)}
-            className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
-            placeholder="Enter password"
-          />
+
+          <div className="flex gap-2">
+            <input
+              type="password"
+              value={values.password}
+              onChange={(event) => updateField("password", event.target.value)}
+              className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
+              placeholder="Enter password"
+            />
+
+            <button
+              type="button"
+              onClick={handleGeneratePassword}
+              className="rounded-2xl border border-blue-300/30 px-4 py-3 text-sm font-semibold text-blue-200 transition hover:bg-blue-300/10"
+            >
+              Generate
+            </button>
+          </div>
         </label>
 
         <label className="grid gap-2">
