@@ -15,6 +15,35 @@ const defaultOptions: PasswordGeneratorOptions = {
   includeSymbols: true,
 };
 
+function getStrengthBarStyles(label: string) {
+  switch (label) {
+    case "Weak":
+      return {
+        widthClass: "w-1/3",
+        colorClass: "bg-red-400",
+        textClass: "text-red-200",
+      };
+    case "Good":
+      return {
+        widthClass: "w-2/3",
+        colorClass: "bg-orange-400",
+        textClass: "text-orange-200",
+      };
+    case "Strong":
+      return {
+        widthClass: "w-full",
+        colorClass: "bg-emerald-400",
+        textClass: "text-emerald-200",
+      };
+    default:
+      return {
+        widthClass: "w-0",
+        colorClass: "bg-slate-500",
+        textClass: "text-slate-300",
+      };
+  }
+}
+
 export function PasswordGenerator() {
   const [options, setOptions] =
     useState<PasswordGeneratorOptions>(defaultOptions);
@@ -23,6 +52,10 @@ export function PasswordGenerator() {
 
   const strength = generatedPassword
     ? getPasswordStrength(generatedPassword)
+    : null;
+
+  const strengthStyles = strength
+    ? getStrengthBarStyles(strength.label)
     : null;
 
   function updateOption<Field extends keyof PasswordGeneratorOptions>(
@@ -168,14 +201,22 @@ export function PasswordGenerator() {
               {generatedPassword}
             </p>
 
-            {strength && (
-              <div className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-3">
-                <p className="text-sm font-semibold text-emerald-200">
-                  Strength: {strength.label}
-                </p>
-                <p className="mt-1 text-xs text-emerald-100/80">
-                  {strength.description}
-                </p>
+            {strength && strengthStyles && (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <p className={`text-sm font-semibold ${strengthStyles.textClass}`}>
+                    Strength: {strength.label}
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    {strength.description}
+                  </p>
+                </div>
+
+                <div className="h-3 w-full overflow-hidden rounded-full bg-slate-700/60">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${strengthStyles.widthClass} ${strengthStyles.colorClass}`}
+                  />
+                </div>
               </div>
             )}
           </div>
