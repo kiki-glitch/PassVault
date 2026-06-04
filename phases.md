@@ -27,6 +27,8 @@ Before coding, confirm:
 You know what data is encrypted
 You know what data is safe to store normally
 You know what Clerk handles vs what your app handles
+
+
 Phase 1: Next.js Project Setup
 Goal
 
@@ -51,6 +53,7 @@ App runs locally
 Tailwind works
 Routes load correctly
 Protected pages redirect if logged out
+
 Phase 2: Clerk Authentication
 Goal
 
@@ -75,6 +78,8 @@ Logged-out user cannot access dashboard
 Logged-in user can access dashboard
 logout works
 refresh keeps session
+
+
 Phase 3: Supabase Setup
 Goal
 
@@ -102,6 +107,8 @@ Test:
 App can connect to Supabase
 A logged-in Clerk user can create a profile row
 You can read profile data in dashboard
+
+
 Phase 4: Row Level Security
 Goal
 
@@ -129,6 +136,7 @@ User A cannot update User B’s data
 Logged-out users cannot access protected data
 
 This is important before storing anything sensitive.
+
 
 Phase 5: Client-Side Encryption
 Goal
@@ -162,6 +170,8 @@ Supabase never receives plaintext
 
 This phase is the heart of the app.
 
+
+
 Phase 6: Vault Unlock Screen
 Goal
 
@@ -191,6 +201,8 @@ vault stays locked by default
 password items are hidden while locked
 unlocking derives encryption key
 refreshing page locks vault again
+
+
 Phase 7: Vault CRUD
 Goal
 
@@ -229,6 +241,8 @@ edit item
 delete item
 wrong key cannot decrypt
 database only contains encrypted text
+
+
 Phase 8: Notes Feature
 Goal
 
@@ -248,6 +262,7 @@ Fields:
 title
 content
 favorite
+
 Testing
 
 Test:
