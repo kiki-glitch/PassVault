@@ -70,3 +70,52 @@ export type EncryptedVaultItemUpdate = {
   favorite: boolean;
   updated_at: string;
 };
+
+export type SecureNoteFormValues = {
+  title: string;
+  content: string;
+  favorite: boolean;
+};
+
+export type EncryptedSecureNoteInsert = {
+  owner_id: string;
+  vault_id: string | null;
+  title_ciphertext: string;
+  content_ciphertext: string;
+  title_iv: string;
+  content_iv: string;
+  salt: string;
+  favorite: boolean;
+};
+
+export type EncryptedSecureNoteUpdate = {
+  title_ciphertext: string;
+  content_ciphertext: string;
+  title_iv: string;
+  content_iv: string;
+  salt: string;
+  favorite: boolean;
+  updated_at: string;
+};
+
+export type SecureNoteRow = {
+  id: string;
+  owner_id: string;
+  vault_id: string | null;
+  title_ciphertext: string;
+  content_ciphertext: string;
+  title_iv: string | null;
+  content_iv: string | null;
+  salt: string;
+  favorite: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DecryptedSecureNote = {
+  id: string;
+  title: string;
+  content: string;
+  favorite: boolean;
+  createdAt: string;
+};

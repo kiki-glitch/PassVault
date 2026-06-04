@@ -4,6 +4,11 @@ import type {
   EncryptedVaultItemUpdate,
   VaultItemFormValues,
   VaultItemRow,
+  DecryptedSecureNote,
+  EncryptedSecureNoteInsert,
+  EncryptedSecureNoteUpdate,
+  SecureNoteFormValues,
+  SecureNoteRow,
 } from "@/types/vault";
 
 const textEncoder = new TextEncoder();
@@ -261,5 +266,90 @@ export async function encryptVaultItemUpdate({
     salt,
     favorite: values.favorite,
     updated_at: new Date().toISOString(),
+  };
+}
+
+export async function encryptSecureNote({
+  values,
+  key,
+  ownerId,
+  vaultId,
+  salt,
+}: {
+  values: SecureNoteFormValues;
+  key: CryptoKey;
+  ownerId: string;
+  vaultId: string | null;
+  salt: string;
+}): Promise<EncryptedSecureNoteInsert> {
+  const encryptedTitle = await encryptText(values.title, key);
+  const encryptedContent = await encryptText(values.content, key);
+
+  return {
+    owner_id: ownerId,
+    vault_id: vaultId,
+    title_ciphertext: encryptedTitle.ciphertext,
+    content_ciphertext: encryptedContent.ciphertext,
+    title_iv: encryptedTitle.iv,
+    content_iv: encryptedContent.iv,
+    salt,
+    favorite: values.favorite,
+  };
+}
+
+export async function encryptSecureNoteUpdate({
+  values,
+  key,
+  salt,
+}: {
+  values: SecureNoteFormValues;
+  key: CryptoKey;
+  salt: string;
+}): Promise<EncryptedSecureNoteUpdate> {
+  const encryptedTitle = await encryptText(values.title, key);
+  const encryptedContent = await encryptText(values.content, key);
+
+  return {
+    title_ciphertext: encryptedTitle.ciphertext,
+    content_ciphertext: encryptedContent.ciphertext,
+    title_iv: encryptedTitle.iv,
+    content_iv: encryptedContent.iv,
+    salt,
+    favorite: values.favorite,
+    updated_at: new Date().toISOString(),
+  };
+}
+
+export async function decryptSecureNote({
+  row,
+  key,
+}: {
+  row: SecureNoteRow;
+  key: CryptoKey;
+}): Promise<DecryptedSecureNote> {
+  const title =
+    row.title_ciphertext && row.title_iv
+      ? await decryptText({
+          ciphertext: row.title_ciphertext,
+          iv: row.title_iv,
+          key,
+        })
+      : "";
+
+  const content =
+    row.content_ciphertext && row.content_iv
+      ? await decryptText({
+          ciphertext: row.content_ciphertext,
+          iv: row.content_iv,
+          key,
+        })
+      : "";
+
+  return {
+    id: row.id,
+    title,
+    content,
+    favorite: row.favorite,
+    createdAt: row.created_at,
   };
 }
