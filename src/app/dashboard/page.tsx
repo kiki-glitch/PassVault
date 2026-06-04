@@ -5,6 +5,7 @@ import { EncryptionTest } from "@/components/dashboard/EncryptionTest";
 import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
 import { VaultDashboardSection } from "@/components/vault/VaultDashboardSection";
 import { PasswordGenerator } from "@/components/vault/PasswordGenerator";
+import { SecureNotesSection } from "@/components/vault/SecureNotesSection";
 
 export default function DashboardPage() {
   return (
@@ -24,6 +25,8 @@ export default function DashboardPage() {
         <VaultUnlockCard />
 
         <VaultDashboardSection/>
+
+        <SecureNotesSection/>
 
         <PasswordGenerator />
 
