@@ -1,0 +1,1 @@
+export type DashboardSection = "passwords" | "notes" | "generator" | "settings";
