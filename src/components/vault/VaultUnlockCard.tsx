@@ -16,7 +16,13 @@ import {
 export function VaultUnlockCard() {
   const { user } = useUser();
   const { getToken } = useAuth();
-  const { isUnlocked, unlockVault, lockVault } = useVault();
+  const {
+  isUnlocked,
+  unlockVault,
+  lockVault,
+  lastActivityAt,
+  autoLockDurationMs,
+} = useVault();
 
   const [masterPassword, setMasterPassword] = useState("");
   const [error, setError] = useState("");
@@ -78,8 +84,20 @@ export function VaultUnlockCard() {
           Your safe little corner is open.
         </h2>
         <p className="mt-2 text-sm text-emerald-100/80">
-          Encryption key is active in browser memory only.
-        </p>
+            Encryption key is active in browser memory only. The vault auto-locks after{" "}
+            {Math.round(autoLockDurationMs / 60000)} minutes of inactivity.
+            </p>
+
+        {lastActivityAt && (
+            <p className="mt-2 text-xs text-emerald-100/60">
+                Last activity recorded at{" "}
+                {new Date(lastActivityAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                })}
+                .
+            </p>
+        )}
 
         <button
           type="button"
