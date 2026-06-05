@@ -3,14 +3,16 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
-import {
-  base64ToUint8Array,
-  deriveVaultKey,
-} from "@/lib/crypto/vaultCrypto";
+import { base64ToUint8Array, deriveVaultKey } from "@/lib/crypto/vaultCrypto";
+
+const AUTO_LOCK_DURATION_MS = 5 * 60 * 1000;
 
 type UnlockVaultParams = {
   masterPassword: string;
@@ -21,8 +23,11 @@ type VaultContextValue = {
   isUnlocked: boolean;
   vaultKey: CryptoKey | null;
   vaultSalt: string | null;
+  lastActivityAt: number | null;
+  autoLockDurationMs: number;
   unlockVault: (params: UnlockVaultParams) => Promise<void>;
   lockVault: () => void;
+  recordActivity: () => void;
 };
 
 const VaultContext = createContext<VaultContextValue | null>(null);
@@ -30,6 +35,39 @@ const VaultContext = createContext<VaultContextValue | null>(null);
 export function VaultProvider({ children }: { children: ReactNode }) {
   const [vaultKey, setVaultKey] = useState<CryptoKey | null>(null);
   const [vaultSalt, setVaultSalt] = useState<string | null>(null);
+  const [lastActivityAt, setLastActivityAt] = useState<number | null>(null);
+
+  const timeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+
+  const isUnlocked = Boolean(vaultKey);
+
+  const clearAutoLockTimer = useCallback(() => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
+  const lockVault = useCallback(() => {
+    clearAutoLockTimer();
+    setVaultKey(null);
+    setLastActivityAt(null);
+  }, [clearAutoLockTimer]);
+
+  const scheduleAutoLock = useCallback(() => {
+    clearAutoLockTimer();
+
+    timeoutRef.current = window.setTimeout(() => {
+      lockVault();
+    }, AUTO_LOCK_DURATION_MS);
+  }, [clearAutoLockTimer, lockVault]);
+
+  const recordActivity = useCallback(() => {
+    if (!isUnlocked) return;
+
+    setLastActivityAt(Date.now());
+    scheduleAutoLock();
+  }, [isUnlocked, scheduleAutoLock]);
 
   async function unlockVault({ masterPassword, vaultSalt }: UnlockVaultParams) {
     if (!masterPassword.trim()) {
@@ -45,21 +83,67 @@ export function VaultProvider({ children }: { children: ReactNode }) {
 
     setVaultKey(key);
     setVaultSalt(vaultSalt);
+    setLastActivityAt(Date.now());
   }
 
-  function lockVault() {
-    setVaultKey(null);
-  }
+  useEffect(() => {
+    if (!isUnlocked) {
+      clearAutoLockTimer();
+      return;
+    }
+
+    scheduleAutoLock();
+
+    return () => {
+      clearAutoLockTimer();
+    };
+  }, [isUnlocked, scheduleAutoLock, clearAutoLockTimer]);
+
+  useEffect(() => {
+    if (!isUnlocked) return;
+
+    const activityEvents = [
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+      "pointermove",
+    ];
+
+    function handleActivity() {
+      recordActivity();
+    }
+
+    activityEvents.forEach((eventName) => {
+      window.addEventListener(eventName, handleActivity);
+    });
+
+    return () => {
+      activityEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, handleActivity);
+      });
+    };
+  }, [isUnlocked, recordActivity]);
 
   const value = useMemo(
     () => ({
-      isUnlocked: Boolean(vaultKey),
+      isUnlocked,
       vaultKey,
       vaultSalt,
+      lastActivityAt,
+      autoLockDurationMs: AUTO_LOCK_DURATION_MS,
       unlockVault,
       lockVault,
+      recordActivity,
     }),
-    [vaultKey, vaultSalt]
+    [
+      isUnlocked,
+      vaultKey,
+      vaultSalt,
+      lastActivityAt,
+      lockVault,
+      recordActivity,
+    ]
   );
 
   return (
