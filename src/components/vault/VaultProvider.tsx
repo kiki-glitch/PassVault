@@ -13,6 +13,7 @@ import {
 import { base64ToUint8Array, deriveVaultKey } from "@/lib/crypto/vaultCrypto";
 
 const AUTO_LOCK_DURATION_MS = 5 * 60 * 1000;
+const ACTIVITY_THROTTLE_MS = 1000;
 
 type UnlockVaultParams = {
   masterPassword: string;
@@ -37,12 +38,13 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   const [vaultSalt, setVaultSalt] = useState<string | null>(null);
   const [lastActivityAt, setLastActivityAt] = useState<number | null>(null);
 
-  const timeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const lastRecordedActivityRef = useRef<number>(0);
 
   const isUnlocked = Boolean(vaultKey);
 
   const clearAutoLockTimer = useCallback(() => {
-    if (timeoutRef.current) {
+    if (timeoutRef.current !== null) {
       window.clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
@@ -65,26 +67,39 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   const recordActivity = useCallback(() => {
     if (!isUnlocked) return;
 
-    setLastActivityAt(Date.now());
+    const now = Date.now();
+
+    if (now - lastRecordedActivityRef.current < ACTIVITY_THROTTLE_MS) {
+      return;
+    }
+
+    lastRecordedActivityRef.current = now;
+    setLastActivityAt(now);
     scheduleAutoLock();
   }, [isUnlocked, scheduleAutoLock]);
 
-  async function unlockVault({ masterPassword, vaultSalt }: UnlockVaultParams) {
-    if (!masterPassword.trim()) {
-      throw new Error("Master password is required.");
-    }
+  const unlockVault = useCallback(
+    async ({ masterPassword, vaultSalt }: UnlockVaultParams) => {
+      if (!masterPassword.trim()) {
+        throw new Error("Master password is required.");
+      }
 
-    if (!vaultSalt) {
-      throw new Error("Vault salt is required.");
-    }
+      if (!vaultSalt) {
+        throw new Error("Vault salt is required.");
+      }
 
-    const saltBytes = base64ToUint8Array(vaultSalt);
-    const key = await deriveVaultKey(masterPassword, saltBytes);
+      const saltBytes = base64ToUint8Array(vaultSalt);
+      const key = await deriveVaultKey(masterPassword, saltBytes);
 
-    setVaultKey(key);
-    setVaultSalt(vaultSalt);
-    setLastActivityAt(Date.now());
-  }
+      const now = Date.now();
+
+      setVaultKey(key);
+      setVaultSalt(vaultSalt);
+      setLastActivityAt(now);
+      lastRecordedActivityRef.current = now;
+    },
+    []
+  );
 
   useEffect(() => {
     if (!isUnlocked) {
@@ -102,7 +117,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isUnlocked) return;
 
-    const activityEvents = [
+    const activityEvents: Array<keyof WindowEventMap> = [
       "mousedown",
       "keydown",
       "touchstart",
@@ -115,7 +130,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
     }
 
     activityEvents.forEach((eventName) => {
-      window.addEventListener(eventName, handleActivity);
+      window.addEventListener(eventName, handleActivity, { passive: true });
     });
 
     return () => {
@@ -124,6 +139,22 @@ export function VaultProvider({ children }: { children: ReactNode }) {
       });
     };
   }, [isUnlocked, recordActivity]);
+
+  useEffect(() => {
+    if (!isUnlocked) return;
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === "hidden") {
+        lockVault();
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isUnlocked, lockVault]);
 
   const value = useMemo(
     () => ({
@@ -141,6 +172,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
       vaultKey,
       vaultSalt,
       lastActivityAt,
+      unlockVault,
       lockVault,
       recordActivity,
     ]
