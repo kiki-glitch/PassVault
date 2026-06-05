@@ -96,3 +96,38 @@ export async function updateUserVaultSalt({
 
   return data;
 }
+
+export async function completeVaultSetup({
+  profileId,
+  vaultSalt,
+  getToken,
+}: {
+  profileId: string;
+  vaultSalt: string;
+  getToken: GetToken;
+}): Promise<ProfileRow> {
+  const { data, error } = await withSupabaseAuthRetry<ProfileRow>(
+    getToken,
+    async (supabase) =>
+      supabase
+        .from("profiles")
+        .update({
+          vault_salt: vaultSalt,
+          vault_initialized: true,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", profileId)
+        .select("*")
+        .single()
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error("Failed to complete vault setup: No data returned.");
+  }
+
+  return data;
+}
