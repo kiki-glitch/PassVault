@@ -271,6 +271,8 @@ create encrypted note
 read encrypted note
 edit encrypted note
 delete encrypted note
+
+
 Phase 9: Password Generator
 Goal
 
@@ -299,6 +301,8 @@ generated passwords respect settings
 password is not sent anywhere
 copy works
 save-to-vault encrypts before storing
+
+
 Phase 10: B’s Custom UI Theme System
 Goal
 
@@ -339,6 +343,8 @@ B theme works
 light mode works
 dark mode works
 changing theme does not break vault logic
+
+
 Phase 11: Security Audit Page
 Goal
 
@@ -365,6 +371,8 @@ weak password detection works
 reused password detection works
 breached check does not expose full password
 audit only runs after vault unlock
+
+
 Phase 12: HaveIBeenPwned Password Breach Check
 Goal
 
@@ -389,6 +397,8 @@ Test:
 known breached password is detected
 strong random password usually passes
 full password is never sent
+
+
 Phase 13: MFA and Passkeys
 Goal
 
@@ -415,6 +425,8 @@ login with TOTP
 login with passkey if enabled
 logout from all devices
 protected routes still work
+
+
 Phase 14: Auto-Lock and Clipboard Safety
 Goal
 
@@ -433,6 +445,8 @@ vault locks after inactivity
 refresh locks vault
 logout clears vault key
 revealed passwords hide again
+
+
 Phase 15: Polish Dashboard UX
 Goal
 
@@ -467,6 +481,8 @@ desktop layout
 empty states
 loading states
 error states
+
+
 Phase 16: SaaS Billing Prep
 Goal
 
@@ -500,6 +516,8 @@ Test:
 free user hits item limit
 pro user bypasses limit
 plan is checked before creating records
+
+
 Phase 17: Stripe Checkout
 Goal
 
@@ -518,6 +536,8 @@ checkout starts
 successful payment updates user plan
 cancelled payment does not upgrade user
 webhook works locally
+
+
 Phase 18: Production Deployment
 Goal
 
@@ -542,6 +562,8 @@ Stripe webhook secret set
 no plaintext logs
 no master password logs
 HTTPS working
+
+
 Phase 19: Final Security Review
 Goal
 
