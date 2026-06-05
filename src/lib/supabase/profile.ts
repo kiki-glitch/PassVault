@@ -8,6 +8,7 @@ export type ProfileRow = {
   display_name: string | null;
   plan: string;
   vault_salt: string | null;
+  vault_initialized: boolean;
   created_at: string;
   updated_at: string;
 };
