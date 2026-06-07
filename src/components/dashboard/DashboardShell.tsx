@@ -9,6 +9,7 @@ type DashboardShellProps = {
     passwordsSection: ReactNode;
     notesSection: ReactNode;
     generatorSection: ReactNode;
+    securitySection: ReactNode;
 }
 
 const navItems:{
@@ -32,6 +33,11 @@ const navItems:{
         description: "Generate strong passwords",
     },
     {
+        id: "security",
+        label: "Safety Check",
+        description: "Audit saved passwords",
+    },
+    {
         id: "settings",
         label: "Settings",
         description: "Vault preferences",
@@ -42,6 +48,7 @@ export function DashboardShell({
   passwordsSection,
   notesSection,
   generatorSection,
+  securitySection,
 }: DashboardShellProps) {
   const [activeSection, setActiveSection] =
     useState<DashboardSection>("passwords");
@@ -125,6 +132,8 @@ export function DashboardShell({
           {activeSection === "notes" && notesSection}
 
           {activeSection === "generator" && generatorSection}
+
+          {activeSection === "security" && securitySection}
 
           {activeSection === "settings" && (
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
