@@ -119,3 +119,29 @@ export type DecryptedSecureNote = {
   favorite: boolean;
   createdAt: string;
 };
+
+export type PasswordAuditIssueType =
+  | "weak"
+  | "short"
+  | "reused"
+  | "missing_username"
+  | "missing_url";
+
+export type PasswordAuditIssue = {
+  itemId: string;
+  title: string;
+  type: PasswordAuditIssueType;
+  severity: "low" | "medium" | "high";
+  message: string;
+};
+
+export type PasswordAuditResult = {
+  score: number;
+  totalItems: number;
+  weakCount: number;
+  shortCount: number;
+  reusedCount: number;
+  missingUsernameCount: number;
+  missingUrlCount: number;
+  issues: PasswordAuditIssue[];
+};
