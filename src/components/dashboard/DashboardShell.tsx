@@ -6,11 +6,12 @@ import { bMemoryVaultTheme } from "@/config/themes";
 import type { DashboardSection } from "@/types/navigation";
 
 type DashboardShellProps = {
-    passwordsSection: ReactNode;
-    notesSection: ReactNode;
-    generatorSection: ReactNode;
-    securitySection: ReactNode;
-}
+  passwordsSection: ReactNode;
+  notesSection: ReactNode;
+  generatorSection: ReactNode;
+  securitySection: ReactNode;
+  settingsSection: ReactNode;
+};
 
 const navItems:{
     id: DashboardSection;
@@ -49,6 +50,7 @@ export function DashboardShell({
   notesSection,
   generatorSection,
   securitySection,
+  settingsSection,
 }: DashboardShellProps) {
   const [activeSection, setActiveSection] =
     useState<DashboardSection>("passwords");
@@ -135,7 +137,7 @@ export function DashboardShell({
 
           {activeSection === "security" && securitySection}
 
-          {activeSection === "settings" && (
+          {/* {activeSection === "settings" && (
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <p className="text-sm text-blue-300">Settings</p>
               <h2 className="mt-2 text-2xl font-bold">Vault settings</h2>
@@ -144,7 +146,10 @@ export function DashboardShell({
                 account security, and vault backup.
               </p>
             </div>
-          )}
+          )} */}
+
+            {activeSection === "settings" && settingsSection}
+
         </section>
       </div>
     </main>
