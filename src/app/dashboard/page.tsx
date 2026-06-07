@@ -3,6 +3,7 @@ import { PasswordGenerator } from "@/components/vault/PasswordGenerator";
 import { SecureNotesSection } from "@/components/vault/SecureNotesSection";
 import { VaultDashboardSection } from "@/components/vault/VaultDashboardSection";
 import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
+import { SecurityAuditSection } from "@/components/vault/SecurityAuditSection";
 
 export default function DashboardPage() {
   return (
@@ -20,6 +21,12 @@ export default function DashboardPage() {
         </>
       }
       generatorSection={<PasswordGenerator />}
+      securitySection={
+        <>
+          <VaultUnlockCard />
+          <SecurityAuditSection />
+        </>
+      }
     />
   );
 }

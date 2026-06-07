@@ -1,1 +1,6 @@
-export type DashboardSection = "passwords" | "notes" | "generator" | "settings";
+export type DashboardSection =
+  | "passwords"
+  | "notes"
+  | "generator"
+  | "security"
+  | "settings";
