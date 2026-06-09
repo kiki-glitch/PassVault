@@ -40,7 +40,7 @@ export function AccountSecurityPanel() {
       </div>
 
       <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-black/30 p-4">
-        <UserProfile />
+        <UserProfile routing="hash" />
       </div>
     </section>
   );
