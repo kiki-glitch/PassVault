@@ -1,9 +1,12 @@
 import { AccountSecurityPanel } from "./AccountSecurityPanel";
+import { BackupSettingsPanel } from "./BackupSettingsPanel";
 
 export function SettingsSection() {
   return (
     <div className="grid gap-6">
       <AccountSecurityPanel />
+
+      <BackupSettingsPanel />
 
       <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
         <p className="text-sm text-pink-300">Vault Settings</p>
@@ -11,8 +14,8 @@ export function SettingsSection() {
           Vault preferences
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-400">
-          Coming next: configurable auto-lock duration, encrypted backup/export,
-          and vault reset controls.
+          Coming next: configurable auto-lock duration, theme options, and vault
+          reset controls.
         </p>
 
         <div className="mt-5 rounded-2xl border border-yellow-300/20 bg-yellow-500/10 p-4">
