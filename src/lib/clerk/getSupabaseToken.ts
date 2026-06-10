@@ -22,14 +22,14 @@ export async function getFreshSupabaseToken(getToken: GetToken) {
 
   const payload = decodeJwtPayload(token);
 
-  console.log("Supabase auth token debug:", {
-    sub: payload.sub,
-    iss: payload.iss,
-    aud: payload.aud,
-    exp: payload.exp,
-    now: Math.floor(Date.now() / 1000),
-    secondsUntilExpiry: payload.exp - Math.floor(Date.now() / 1000),
-  });
+  // console.log("Supabase auth token debug:", {
+  //   sub: payload.sub,
+  //   iss: payload.iss,
+  //   aud: payload.aud,
+  //   exp: payload.exp,
+  //   now: Math.floor(Date.now() / 1000),
+  //   secondsUntilExpiry: payload.exp - Math.floor(Date.now() / 1000),
+  // });
 
   return token;
 }
