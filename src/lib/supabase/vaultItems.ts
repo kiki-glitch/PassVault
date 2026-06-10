@@ -1,6 +1,6 @@
 import type { GetToken } from "@clerk/nextjs/types";
 import { withSupabaseAuthRetry } from "./withSupabaseAuthRetry";
-import type { EncryptedVaultItemInsert, EncryptedVaultItemUpdate ,VaultItemRow } from "@/types/vault";
+import type {EncryptedBackupVaultItem, EncryptedVaultItemInsert, EncryptedVaultItemUpdate ,VaultItemRow } from "@/types/vault";
 
 export async function createVaultItem({
   getToken,
@@ -97,4 +97,28 @@ export async function updateVaultItem({
   }
 
   return data;
+}
+
+export async function importVaultItems({
+  getToken,
+  items,
+}: {
+  getToken: GetToken;
+  items: EncryptedBackupVaultItem[];
+}): Promise<VaultItemRow[]> {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const { data, error } = await withSupabaseAuthRetry<VaultItemRow[]>(
+    getToken,
+    async (supabase) =>
+      supabase.from("vault_items").insert(items).select("*")
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return data ?? [];
 }

@@ -1,6 +1,7 @@
 import type { GetToken } from "@clerk/nextjs/types";
 import { withSupabaseAuthRetry } from "./withSupabaseAuthRetry";
 import type {
+  EncryptedBackupSecureNote,
   EncryptedSecureNoteInsert,
   EncryptedSecureNoteUpdate,
   SecureNoteRow,
@@ -107,4 +108,28 @@ export async function deleteSecureNote({
   if (error) {
     throw error;
   }
+}
+
+export async function importSecureNotes({
+  getToken,
+  notes,
+}: {
+  getToken: GetToken;
+  notes: EncryptedBackupSecureNote[];
+}): Promise<SecureNoteRow[]> {
+  if (notes.length === 0) {
+    return [];
+  }
+
+  const { data, error } = await withSupabaseAuthRetry<SecureNoteRow[]>(
+    getToken,
+    async (supabase) =>
+      supabase.from("secure_notes").insert(notes).select("*")
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return data ?? [];
 }
