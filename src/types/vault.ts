@@ -145,3 +145,23 @@ export type PasswordAuditResult = {
   missingUrlCount: number;
   issues: PasswordAuditIssue[];
 };
+
+export type EncryptedBackupVaultItem = Omit<
+  VaultItemRow,
+  "id" | "created_at" | "updated_at"
+>;
+
+export type EncryptedBackupSecureNote = Omit<
+  SecureNoteRow,
+  "id" | "created_at" | "updated_at"
+>;
+
+export type EncryptedVaultBackup = {
+  app: "B_MEMORY_VAULT";
+  version: 1;
+  exportedAt: string;
+  data: {
+    vaultItems: EncryptedBackupVaultItem[];
+    secureNotes: EncryptedBackupSecureNote[];
+  };
+};
