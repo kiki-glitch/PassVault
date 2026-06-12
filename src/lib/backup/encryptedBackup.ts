@@ -27,15 +27,37 @@ export function createEncryptedBackup({
 function stripVaultItemForBackup(
   item: VaultItemRow
 ): EncryptedBackupVaultItem {
-  const { id, created_at, updated_at, ...backupItem } = item;
-  return backupItem;
+  return {
+    owner_id: item.owner_id,
+    vault_id: item.vault_id,
+    title_ciphertext: item.title_ciphertext,
+    username_ciphertext: item.username_ciphertext,
+    password_ciphertext: item.password_ciphertext,
+    url_ciphertext: item.url_ciphertext,
+    notes_ciphertext: item.notes_ciphertext,
+    title_iv: item.title_iv,
+    username_iv: item.username_iv,
+    password_iv: item.password_iv,
+    url_iv: item.url_iv,
+    notes_iv: item.notes_iv,
+    salt: item.salt,
+    favorite: item.favorite,
+  };
 }
 
 function stripSecureNoteForBackup(
   note: SecureNoteRow
 ): EncryptedBackupSecureNote {
-  const { id, created_at, updated_at, ...backupNote } = note;
-  return backupNote;
+  return {
+    owner_id: note.owner_id,
+    vault_id: note.vault_id,
+    title_ciphertext: note.title_ciphertext,
+    content_ciphertext: note.content_ciphertext,
+    title_iv: note.title_iv,
+    content_iv: note.content_iv,
+    salt: note.salt,
+    favorite: note.favorite,
+  };
 }
 
 export function downloadEncryptedBackup(backup: EncryptedVaultBackup) {

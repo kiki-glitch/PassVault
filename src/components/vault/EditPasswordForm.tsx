@@ -6,7 +6,6 @@ import { encryptVaultItemUpdate } from "@/lib/crypto/vaultCrypto";
 import { updateVaultItem } from "@/lib/supabase/vaultItems";
 import { useVault } from "./VaultProvider";
 import type { DecryptedVaultItem, VaultItemFormValues } from "@/types/vault";
-import { currentUser } from "@clerk/nextjs/server";
 import { generatePassword } from "@/lib/crypto/passwordGenerator";
 
 export function EditPasswordForm({
