@@ -45,7 +45,7 @@ export function base64ToUint8Array(base64: string){
     return bytes;
 }
 
-export async function deriveVaultKey(masterPassword: string, salt: Uint8Array) {
+export async function deriveVaultKey(masterPassword: string, salt: Uint8Array<ArrayBuffer>) {
   const passwordKey = await crypto.subtle.importKey(
     "raw",
     textEncoder.encode(masterPassword),
