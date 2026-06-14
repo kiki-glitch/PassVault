@@ -12,6 +12,11 @@ export const bMemoryVaultTheme = {
     unlockTitle: "Welcome back, B.",
     unlockSubtitle: "Your little memory vault is locked.",
     unlockButton: "Unlock Vault",
+    setupTitle: "Create your master password",
+    setupSubtitle:
+      "This password unlocks your vault and is separate from your account login.",
+    setupNotice:
+      "Your master password is never sent to the server. If forgotten, saved vault data cannot be decrypted.",
     dashboardGreeting: "Hi B, your safe little corner is ready.",
     dashboardEyebrow: "B's private corner",
     dashboardSubtitle:
@@ -43,5 +48,18 @@ export const bMemoryVaultTheme = {
     darkCard: "#151426",
     lightBackground: "#fff7fb",
     lightCard: "#ffffff",
+    accent: "#f472b6",
+    support: "#60a5fa",
+  },
+
+  fonts: {
+    display: "var(--font-fraunces)",
+    body: "var(--font-geist-sans)",
+  },
+
+  radius: {
+    card: "16px",
+    input: "12px",
+    chip: "8px",
   },
 } satisfies Theme;

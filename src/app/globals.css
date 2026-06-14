@@ -5,12 +5,20 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--vault-font-display);
 
   /* Vault theme tokens — values injected by layout.tsx */
   --color-vault-bg: var(--vault-bg);
   --color-vault-card: var(--vault-card);
   --color-vault-pink: var(--vault-pink);
   --color-vault-blue: var(--vault-blue);
+  --color-vault-accent: var(--vault-accent);
+  --color-vault-support: var(--vault-support);
+
+  /* Radius tokens */
+  --radius-vault-card: var(--vault-radius-card);
+  --radius-vault-input: var(--vault-radius-input);
+  --radius-vault-chip: var(--vault-radius-chip);
 }
 
 body {

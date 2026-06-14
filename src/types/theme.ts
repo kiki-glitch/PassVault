@@ -5,6 +5,19 @@ export type ThemeColors = {
   darkCard: string;
   lightBackground: string;
   lightCard: string;
+  accent: string;
+  support: string;
+};
+
+export type ThemeFonts = {
+  display: string;
+  body: string;
+};
+
+export type ThemeRadius = {
+  card: string;
+  input: string;
+  chip: string;
 };
 
 export type ThemeCopy = {
@@ -13,6 +26,9 @@ export type ThemeCopy = {
   unlockTitle: string;
   unlockSubtitle: string;
   unlockButton: string;
+  setupTitle: string;
+  setupSubtitle: string;
+  setupNotice: string;
   dashboardGreeting: string;
   dashboardEyebrow: string;
   dashboardSubtitle: string;
@@ -43,4 +59,6 @@ export type Theme = {
   copy: ThemeCopy;
   labels: ThemeLabels;
   colors: ThemeColors;
+  fonts: ThemeFonts;
+  radius: ThemeRadius;
 };

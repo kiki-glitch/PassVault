@@ -13,6 +13,20 @@ import { arrayBuffertoBase64, generateSalt } from "@/lib/crypto/vaultCrypto";
 
 type VaultMode = "loading" | "setup" | "unlock";
 
+// Shared class strings — every token comes from the theme system
+const inputCls =
+  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+
+const primaryBtnCls =
+  "mt-1 w-full rounded-vault-input bg-vault-accent py-3 text-sm font-semibold " +
+  "text-slate-950 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60";
+
+const cardShellCls = "flex min-h-[56vh] items-center justify-center px-4 py-12";
+const cardInnerCls =
+  "w-full max-w-[360px] rounded-vault-card border border-white/8 bg-vault-card " +
+  "p-8 shadow-2xl shadow-black/50 ring-1 ring-vault-accent/10";
+
 export function VaultUnlockCard() {
   const { user, isLoaded } = useUser();
   const { getToken } = useAuth();
@@ -153,98 +167,87 @@ export function VaultUnlockCard() {
     }
   }
 
+  // ── Unlocked: compact status strip ───────────────────────────────────────
   if (isUnlocked) {
     return (
-      <div className="rounded-3xl border border-emerald-300/20 bg-emerald-500/10 p-6">
-        <p className="text-sm text-emerald-200">Vault unlocked</p>
-
-        <h2 className="mt-2 text-2xl font-bold text-white">
-          Your safe little corner is open.
-        </h2>
-
-        <p className="mt-2 text-sm text-emerald-100/80">
-          Encryption key is active in browser memory only. The vault auto-locks
-          after {Math.round(autoLockDurationMs / 60000)} minutes of inactivity.
-        </p>
-
-        {lastActivityAt && (
-          <p className="mt-2 text-xs text-emerald-100/60">
-            Last activity recorded at{" "}
-            {new Date(lastActivityAt).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-            .
+      <div className="mb-6 flex items-center justify-between rounded-vault-card border border-emerald-300/15 bg-emerald-500/[0.06] px-5 py-3.5">
+        <div>
+          <p className="text-sm font-medium text-emerald-300">Vault unlocked</p>
+          <p className="mt-0.5 text-xs text-emerald-300/55">
+            Key active in browser memory · auto-locks after{" "}
+            {Math.round(autoLockDurationMs / 60000)} min
+            {lastActivityAt &&
+              ` · active ${new Date(lastActivityAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}`}
           </p>
-        )}
-
+        </div>
         <button
           type="button"
           onClick={lockVault}
-          className="mt-5 rounded-full border border-emerald-300/30 px-5 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/10"
+          className="rounded-vault-chip border border-emerald-300/20 px-4 py-1.5 text-xs font-medium text-emerald-200/75 transition hover:bg-emerald-300/10"
         >
-          Lock Vault
+          Lock
         </button>
       </div>
     );
   }
 
+  // ── Loading: centered pulse ───────────────────────────────────────────────
   if (mode === "loading") {
     return (
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <p className="text-sm text-blue-300">Checking vault status...</p>
-        <h2 className="mt-2 text-2xl font-bold text-white">
-          Preparing your vault
-        </h2>
-        <p className="mt-2 text-sm text-slate-400">
-          We are checking whether this vault has already been set up.
-        </p>
+      <div className="flex min-h-[56vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex h-11 w-11 animate-pulse items-center justify-center rounded-vault-chip bg-vault-accent/10 font-display text-xl font-medium text-vault-accent">
+            {bMemoryVaultTheme.ownerInitial}
+          </div>
+          <p className="text-xs text-white/35">Preparing your vault…</p>
+        </div>
       </div>
     );
   }
 
+  // Monogram badge — shared between setup and unlock
+  const monogram = (
+    <div className="mb-7 flex justify-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-vault-chip bg-vault-accent/10 font-display text-[1.375rem] font-medium text-vault-accent shadow-lg shadow-vault-accent/20">
+        {bMemoryVaultTheme.ownerInitial}
+      </div>
+    </div>
+  );
+
+  // ── Setup: first-time vault creation ─────────────────────────────────────
   if (mode === "setup") {
     return (
-      <div className="rounded-3xl border border-pink-300/20 bg-white/5 p-6 shadow-lg shadow-pink-500/10">
-        <p className="text-sm text-pink-300">First-time vault setup</p>
+      <div className={cardShellCls}>
+        <div className={cardInnerCls}>
+          {monogram}
 
-        <h2 className="mt-2 text-2xl font-bold text-white">
-          Create B’s master password
-        </h2>
+          <div className="mb-6 text-center">
+            <h1 className="font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+              {bMemoryVaultTheme.copy.setupTitle}
+            </h1>
+            <p className="mt-2 text-sm leading-relaxed text-white/45">
+              {bMemoryVaultTheme.copy.setupSubtitle}
+            </p>
+          </div>
 
-        <p className="mt-2 text-sm text-slate-400">
-          This password unlocks encrypted passwords and notes. It is different
-          from the account login password.
-        </p>
+          <div className="mb-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+            <p className="text-xs leading-relaxed text-white/40">
+              {bMemoryVaultTheme.copy.setupNotice}
+            </p>
+          </div>
 
-        <div className="mt-5 rounded-2xl border border-yellow-300/20 bg-yellow-500/10 p-4">
-          <p className="text-sm font-semibold text-yellow-100">
-            Important: this cannot be recovered.
-          </p>
-          <p className="mt-2 text-sm leading-6 text-yellow-100/80">
-            Because this is a zero-knowledge vault, the master password is never
-            sent to the server or stored anywhere. If it is forgotten, saved
-            vault data cannot be decrypted.
-          </p>
-        </div>
-
-        <form onSubmit={handleSetupSubmit} className="mt-6 grid gap-4">
-          <label className="grid gap-2">
-            <span className="text-sm text-slate-300">Master Password</span>
-
+          <form onSubmit={handleSetupSubmit} className="grid gap-3">
             <input
               type="password"
               value={masterPassword}
               onChange={(event) => setMasterPassword(event.target.value)}
-              className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition focus:border-pink-300"
-              placeholder="Create vault master password"
+              className={inputCls}
+              placeholder="Create master password"
+              autoComplete="new-password"
             />
-          </label>
-
-          <label className="grid gap-2">
-            <span className="text-sm text-slate-300">
-              Confirm Master Password
-            </span>
 
             <input
               type="password"
@@ -252,66 +255,74 @@ export function VaultUnlockCard() {
               onChange={(event) =>
                 setConfirmMasterPassword(event.target.value)
               }
-              className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition focus:border-pink-300"
-              placeholder="Repeat vault master password"
+              className={inputCls}
+              placeholder="Confirm master password"
+              autoComplete="new-password"
             />
-          </label>
 
-          {error && <p className="text-sm text-red-300">{error}</p>}
-          {infoMessage && <p className="text-sm text-blue-200">{infoMessage}</p>}
+            {error && <p className="text-xs text-red-400/80">{error}</p>}
+            {infoMessage && (
+              <p className="text-xs text-white/45">{infoMessage}</p>
+            )}
 
-          <button
-            type="submit"
-            disabled={isProcessing}
-            className="rounded-full bg-pink-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-pink-300 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isProcessing ? "Setting up..." : "Create & Unlock Vault"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={isProcessing}
+              className={primaryBtnCls}
+            >
+              {isProcessing ? "Setting up…" : "Create & Unlock Vault"}
+            </button>
+          </form>
+        </div>
       </div>
     );
   }
 
+  // ── Unlock: main recurring state ──────────────────────────────────────────
   return (
-    <div className="rounded-3xl border border-pink-300/20 bg-white/5 p-6 shadow-lg shadow-pink-500/10">
-      <p className="text-sm text-pink-300">{bMemoryVaultTheme.copy.vaultLocked}</p>
+    <div className={cardShellCls}>
+      <div className={cardInnerCls}>
+        {monogram}
 
-      <h2 className="mt-2 text-2xl font-bold text-white">
-        {bMemoryVaultTheme.copy.unlockTitle}
-      </h2>
+        <div className="mb-7 text-center">
+          <h1 className="font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+            {bMemoryVaultTheme.copy.unlockTitle}
+          </h1>
+          <p className="mt-2 text-sm text-white/45">
+            {bMemoryVaultTheme.copy.unlockSubtitle}
+          </p>
+        </div>
 
-      <p className="mt-2 text-sm text-slate-400">
-        {bMemoryVaultTheme.copy.unlockSubtitle}
-      </p>
-
-      <form onSubmit={handleUnlockSubmit} className="mt-6 grid gap-4">
-        <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Master Password</span>
-
+        <form onSubmit={handleUnlockSubmit} className="grid gap-3">
           <input
             type="password"
             value={masterPassword}
             onChange={(event) => setMasterPassword(event.target.value)}
-            className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition focus:border-pink-300"
-            placeholder="Enter vault master password"
+            className={inputCls}
+            placeholder="Master password"
+            autoComplete="current-password"
+            autoFocus
           />
-        </label>
 
-        {error && <p className="text-sm text-red-300">{error}</p>}
-        {infoMessage && <p className="text-sm text-blue-200">{infoMessage}</p>}
+          {error && <p className="text-xs text-red-400/80">{error}</p>}
+          {infoMessage && (
+            <p className="text-xs text-white/45">{infoMessage}</p>
+          )}
 
-        <button
-          type="submit"
-          disabled={isProcessing}
-          className="rounded-full bg-pink-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-pink-300 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isProcessing ? "Unlocking..." : bMemoryVaultTheme.copy.unlockButton}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={isProcessing}
+            className={primaryBtnCls}
+          >
+            {isProcessing ? "Unlocking…" : bMemoryVaultTheme.copy.unlockButton}
+          </button>
+        </form>
 
-      <p className="mt-4 text-xs text-slate-500">
-        Your master password never leaves this browser.
-      </p>
+        <p className="mt-6 text-center text-xs leading-relaxed text-white/30">
+          Your master password never leaves this browser and cannot be
+          recovered.
+        </p>
+      </div>
     </div>
   );
 }
