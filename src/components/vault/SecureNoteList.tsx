@@ -7,6 +7,7 @@ import { deleteSecureNote, getSecureNotes } from "@/lib/supabase/secureNotes";
 import { useVault } from "./VaultProvider";
 import { EditSecureNoteForm } from "./EditSecureNoteForm";
 import type { DecryptedSecureNote } from "@/types/vault";
+import { bMemoryVaultTheme } from "@/config/themes";
 
 export function SecureNoteList({
   refreshKey,
@@ -109,8 +110,8 @@ export function SecureNoteList({
     <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-sm text-blue-300">Little Notes</p>
-          <h2 className="mt-2 text-2xl font-bold">Secure Notes</h2>
+          <p className="text-sm text-blue-300">{bMemoryVaultTheme.labels.notes}</p>
+          <h2 className="mt-2 text-2xl font-bold">{bMemoryVaultTheme.labels.notes}</h2>
           <p className="mt-2 text-sm text-slate-400">{message}</p>
         </div>
 
@@ -185,7 +186,7 @@ export function SecureNoteList({
 
                     {note.favorite && (
                       <span className="rounded-full bg-blue-400/20 px-2 py-1 text-xs text-blue-200">
-                        Favorite
+                        {bMemoryVaultTheme.labels.favorites}
                       </span>
                     )}
                   </div>

@@ -274,7 +274,7 @@ export function VaultUnlockCard() {
 
   return (
     <div className="rounded-3xl border border-pink-300/20 bg-white/5 p-6 shadow-lg shadow-pink-500/10">
-      <p className="text-sm text-pink-300">Vault locked</p>
+      <p className="text-sm text-pink-300">{bMemoryVaultTheme.copy.vaultLocked}</p>
 
       <h2 className="mt-2 text-2xl font-bold text-white">
         {bMemoryVaultTheme.copy.unlockTitle}

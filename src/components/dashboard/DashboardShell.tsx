@@ -13,37 +13,37 @@ type DashboardShellProps = {
   settingsSection: ReactNode;
 };
 
-const navItems:{
-    id: DashboardSection;
-    label: string;
-    description: string;
+const navItems: {
+  id: DashboardSection;
+  label: string;
+  description: string;
 }[] = [
-    {
+  {
     id: "passwords",
-    label: "Saved Keys",
-    description: "Passwords and logins",
-    },
-    {
-        id: "notes",
-        label: "Little Notes",
-        description: "Private encrypted notes",
-    },
-    {
-        id: "generator",
-        label: "Magic Maker",
-        description: "Generate strong passwords",
-    },
-    {
-        id: "security",
-        label: "Safety Check",
-        description: "Audit saved passwords",
-    },
-    {
-        id: "settings",
-        label: "Settings",
-        description: "Vault preferences",
-    },
-]
+    label: bMemoryVaultTheme.labels.passwords,
+    description: bMemoryVaultTheme.labels.passwordsDescription,
+  },
+  {
+    id: "notes",
+    label: bMemoryVaultTheme.labels.notes,
+    description: bMemoryVaultTheme.labels.notesDescription,
+  },
+  {
+    id: "generator",
+    label: bMemoryVaultTheme.labels.generator,
+    description: bMemoryVaultTheme.labels.generatorDescription,
+  },
+  {
+    id: "security",
+    label: bMemoryVaultTheme.labels.security,
+    description: bMemoryVaultTheme.labels.securityDescription,
+  },
+  {
+    id: "settings",
+    label: bMemoryVaultTheme.labels.settings,
+    description: bMemoryVaultTheme.labels.settingsDescription,
+  },
+];
 
 export function DashboardShell({
   passwordsSection,
@@ -115,13 +115,12 @@ export function DashboardShell({
           <header className="mb-6 rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-xl shadow-blue-500/5">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
-                <p className="text-sm text-pink-300">B’s private corner</p>
+                <p className="text-sm text-pink-300">{bMemoryVaultTheme.copy.dashboardEyebrow}</p>
                 <h2 className="mt-2 text-2xl font-bold md:text-3xl">
                   {bMemoryVaultTheme.copy.dashboardGreeting}
                 </h2>
                 <p className="mt-2 text-sm text-slate-400">
-                  Manage saved keys, little notes, and password generation from
-                  one clean space.
+                  {bMemoryVaultTheme.copy.dashboardSubtitle}
                 </p>
               </div>
 

@@ -6,6 +6,7 @@ import {
   getPasswordStrength,
   type PasswordGeneratorOptions,
 } from "@/lib/crypto/passwordGenerator";
+import { bMemoryVaultTheme } from "@/config/themes";
 
 const defaultOptions: PasswordGeneratorOptions = {
   length: 18,
@@ -100,7 +101,7 @@ export function PasswordGenerator() {
   return (
     <section className="mt-8 rounded-3xl border border-blue-300/20 bg-white/5 p-6 shadow-lg shadow-blue-500/5">
       <div>
-        <p className="text-sm text-blue-300">Magic Password Maker</p>
+        <p className="text-sm text-blue-300">{bMemoryVaultTheme.labels.generator}</p>
         <h2 className="mt-2 text-2xl font-bold text-white">
           Generate a strong password
         </h2>
