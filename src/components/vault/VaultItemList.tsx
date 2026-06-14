@@ -8,6 +8,7 @@ import { getVaults } from "@/lib/supabase/vaults";
 import { useVault } from "./VaultProvider";
 import type { DecryptedVaultItem } from "@/types/vault";
 import { EditPasswordForm } from "./EditPasswordForm";
+import { bMemoryVaultTheme } from "@/config/themes";
 
 export function VaultItemList() {
   const { user, isLoaded } = useUser();
@@ -152,8 +153,8 @@ export function VaultItemList() {
     <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-sm text-pink-300">Your saved keys</p>
-          <h2 className="mt-2 text-2xl font-bold">Passwords</h2>
+          <p className="text-sm text-pink-300">{bMemoryVaultTheme.labels.passwords}</p>
+          <h2 className="mt-2 text-2xl font-bold">{bMemoryVaultTheme.labels.passwords}</h2>
           <p className="mt-2 text-sm text-slate-400">{message}</p>
         </div>
 
@@ -231,7 +232,7 @@ export function VaultItemList() {
 
                     {item.favorite && (
                       <span className="rounded-full bg-pink-400/20 px-2 py-1 text-xs text-pink-200">
-                        Favorite
+                        {bMemoryVaultTheme.labels.favorites}
                       </span>
                     )}
                   </div>
@@ -274,7 +275,7 @@ export function VaultItemList() {
                     onClick={() => handleReveal(item.id)}
                     className="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-slate-200 hover:bg-white/10"
                   >
-                    {isPasswordVisible ? "Hide" : "Reveal"}
+                    {isPasswordVisible ? bMemoryVaultTheme.copy.hidePassword : bMemoryVaultTheme.copy.revealPassword}
                   </button>
 
                   <button
@@ -282,7 +283,7 @@ export function VaultItemList() {
                     onClick={() => handleCopyPassword(item.password)}
                     className="rounded-full border border-blue-300/30 px-4 py-2 text-xs font-semibold text-blue-200 hover:bg-blue-300/10"
                   >
-                    Copy
+                    {bMemoryVaultTheme.copy.copyPassword}
                   </button>
 
                   <button

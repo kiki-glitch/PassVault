@@ -9,6 +9,7 @@ import { encryptVaultItem } from "@/lib/crypto/vaultCrypto";
 import { useVault } from "./VaultProvider";
 import type { VaultItemFormValues } from "@/types/vault";
 import { generatePassword } from "@/lib/crypto/passwordGenerator";
+import { bMemoryVaultTheme } from "@/config/themes";
 
 const initialFormValues: VaultItemFormValues = {
   title: "",
@@ -134,7 +135,7 @@ export function AddPasswordForm({
       className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6"
     >
       <div>
-        <p className="text-sm text-pink-300">Saved Keys</p>
+        <p className="text-sm text-pink-300">{bMemoryVaultTheme.labels.passwords}</p>
         <h2 className="mt-2 text-2xl font-bold">Add a password</h2>
         <p className="mt-2 text-sm text-slate-400">
           This form encrypts the password in your browser before saving it.

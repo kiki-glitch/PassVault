@@ -14,6 +14,12 @@ export type ThemeCopy = {
   unlockSubtitle: string;
   unlockButton: string;
   dashboardGreeting: string;
+  dashboardEyebrow: string;
+  dashboardSubtitle: string;
+  vaultLocked: string;
+  revealPassword: string;
+  hidePassword: string;
+  copyPassword: string;
 };
 
 export type ThemeLabels = {
@@ -21,6 +27,13 @@ export type ThemeLabels = {
   notes: string;
   generator: string;
   security: string;
+  favorites: string;
+  settings: string;
+  passwordsDescription: string;
+  notesDescription: string;
+  generatorDescription: string;
+  securityDescription: string;
+  settingsDescription: string;
 };
 
 export type Theme = {

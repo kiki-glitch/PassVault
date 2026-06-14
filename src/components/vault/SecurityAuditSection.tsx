@@ -8,6 +8,7 @@ import { getVaultItems } from "@/lib/supabase/vaultItems";
 import { getVaults } from "@/lib/supabase/vaults";
 import { useVault } from "./VaultProvider";
 import type { DecryptedVaultItem, PasswordAuditResult } from "@/types/vault";
+import { bMemoryVaultTheme } from "@/config/themes";
 
 function getScoreLabel(score: number) {
   if (score >= 85) return "Excellent";
@@ -106,7 +107,7 @@ export function SecurityAuditSection(){
     return (
         <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
             <div>
-                <p className="text-sm text-pink-300">Safety Check</p>
+                <p className="text-sm text-pink-300">{bMemoryVaultTheme.labels.security}</p>
                 <h2 className="mt-2 text-2xl font-bold">Security audit</h2>
                 <p className="mt-2 text-sm text-slate-400">{message}</p>
             </div>

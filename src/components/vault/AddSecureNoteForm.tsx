@@ -8,6 +8,7 @@ import { createVault, getVaults } from "@/lib/supabase/vaults";
 import { createSecureNote } from "@/lib/supabase/secureNotes";
 import { useVault } from "./VaultProvider";
 import type { SecureNoteFormValues } from "@/types/vault";
+import { bMemoryVaultTheme } from "@/config/themes";
 
 const initialFormValues: SecureNoteFormValues = {
   title: "",
@@ -112,7 +113,7 @@ export function AddSecureNoteForm({
       className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6"
     >
       <div>
-        <p className="text-sm text-blue-300">Little Notes</p>
+        <p className="text-sm text-blue-300">{bMemoryVaultTheme.labels.notes}</p>
         <h2 className="mt-2 text-2xl font-bold">Add a secure note</h2>
         <p className="mt-2 text-sm text-slate-400">
           Notes are encrypted in your browser before being saved.
