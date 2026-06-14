@@ -1,3 +1,5 @@
+import type { Theme } from "@/types/theme";
+
 export const bMemoryVaultTheme = {
     id: "b-memory-vault",
     appName: "B's Memory Vault",
@@ -28,4 +30,4 @@ export const bMemoryVaultTheme = {
         lightCard: "#ffffff",
     },
 
-};
+} satisfies Theme;

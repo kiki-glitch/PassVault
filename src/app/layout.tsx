@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { bMemoryVaultTheme } from "@/config/themes";
+import { generateThemeCss } from "@/lib/theme/generateThemeCss";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,9 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "B’s Memory Vault",
+  title: "B's Memory Vault",
   description: "A private zero-knowledge password vault.",
 };
+
+const themeCss = generateThemeCss(bMemoryVaultTheme);
 
 export default function RootLayout({
   children,
@@ -24,11 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider afterSignOutUrl="/" >
+    <ClerkProvider afterSignOutUrl="/">
       <html
         lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
+        <head>
+          <style dangerouslySetInnerHTML={{ __html: themeCss }} />
+        </head>
         <body className="min-h-full flex flex-col">{children}</body>
       </html>
     </ClerkProvider>
