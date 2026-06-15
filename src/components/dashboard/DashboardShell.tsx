@@ -3,6 +3,8 @@
 import { ReactNode, useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { bMemoryVaultTheme } from "@/config/themes";
+import { useVault } from "@/components/vault/VaultProvider";
+import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
 import type { DashboardSection } from "@/types/navigation";
 
 type DashboardShellProps = {
@@ -66,6 +68,7 @@ export function DashboardShell({
 }: DashboardShellProps) {
   const [activeSection, setActiveSection] =
     useState<DashboardSection>("passwords");
+  const { isUnlocked } = useVault();
 
   return (
     <main className="min-h-screen bg-vault-bg text-white">
@@ -130,31 +133,38 @@ export function DashboardShell({
 
         {/* ── Main content ───────────────────────────────────────────────── */}
         <section className="min-w-0">
+          {!isUnlocked ? (
+            <VaultUnlockCard />
+          ) : (
+            <>
+              {/* Dashboard greeting header */}
+              <header className={`mb-6 p-5 ${panelCls}`}>
+                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
+                      {bMemoryVaultTheme.copy.dashboardEyebrow}
+                    </p>
+                    <h2 className="mt-2 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+                      {bMemoryVaultTheme.copy.dashboardGreeting}
+                    </h2>
+                    <p className="mt-2 text-sm text-white/45">
+                      {bMemoryVaultTheme.copy.dashboardSubtitle}
+                    </p>
+                  </div>
 
-          {/* Dashboard greeting header */}
-          <header className={`mb-6 p-5 ${panelCls}`}>
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
-                  {bMemoryVaultTheme.copy.dashboardEyebrow}
-                </p>
-                <h2 className="mt-2 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
-                  {bMemoryVaultTheme.copy.dashboardGreeting}
-                </h2>
-                <p className="mt-2 text-sm text-white/45">
-                  {bMemoryVaultTheme.copy.dashboardSubtitle}
-                </p>
-              </div>
+                  <UserButton />
+                </div>
+              </header>
 
-              <UserButton />
-            </div>
-          </header>
+              <VaultUnlockCard />
 
-          {activeSection === "passwords" && passwordsSection}
-          {activeSection === "notes" && notesSection}
-          {activeSection === "generator" && generatorSection}
-          {activeSection === "security" && securitySection}
-          {activeSection === "settings" && settingsSection}
+              {activeSection === "passwords" && passwordsSection}
+              {activeSection === "notes" && notesSection}
+              {activeSection === "generator" && generatorSection}
+              {activeSection === "security" && securitySection}
+              {activeSection === "settings" && settingsSection}
+            </>
+          )}
         </section>
 
       </div>
