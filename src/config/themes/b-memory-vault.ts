@@ -56,6 +56,12 @@ export const bMemoryVaultTheme = {
     darkForeground: "#ffffff",
     darkForegroundMuted: "#85838f",
     darkForegroundFaint: "#545162",
+    insetSurface: "#ede8f8",
+    borderColor: "#dcd7ed",
+    overlayColor: "#1a1628",
+    darkInsetSurface: "#0d0b1a",
+    darkBorderColor: "#26233e",
+    darkOverlayColor: "#ffffff",
   },
 
   fonts: {

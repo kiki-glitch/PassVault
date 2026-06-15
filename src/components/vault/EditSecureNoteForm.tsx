@@ -8,7 +8,7 @@ import { useVault } from "./VaultProvider";
 import type { DecryptedSecureNote, SecureNoteFormValues } from "@/types/vault";
 
 const inputCls =
-  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "w-full rounded-vault-input border border-vault-border bg-vault-inset px-4 py-3 text-sm " +
   "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const labelCls = "text-xs font-medium text-vault-text-muted";
@@ -141,7 +141,7 @@ export function EditSecureNoteForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-vault-input border border-white/10 px-6 py-2.5 text-sm font-medium text-vault-text-muted transition hover:bg-white/[0.04]"
+          className="rounded-vault-input border border-vault-border px-6 py-2.5 text-sm font-medium text-vault-text-muted transition hover:bg-vault-overlay/[0.04]"
         >
           Cancel
         </button>

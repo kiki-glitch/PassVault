@@ -17,7 +17,7 @@ const initialFormValues: SecureNoteFormValues = {
 };
 
 const inputCls =
-  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "w-full rounded-vault-input border border-vault-border bg-vault-inset px-4 py-3 text-sm " +
   "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const labelCls = "text-xs font-medium text-vault-text-muted";
@@ -121,7 +121,7 @@ export function AddSecureNoteForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-6 rounded-vault-panel border border-white/8 bg-vault-card p-6"
+      className="mt-6 rounded-vault-panel border border-vault-border bg-vault-card p-6"
     >
       <div>
         <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">

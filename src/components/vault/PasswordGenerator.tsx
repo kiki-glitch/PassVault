@@ -25,7 +25,7 @@ function getStrengthBarStyles(label: string) {
     case "Strong":
       return { widthClass: "w-full", colorClass: "bg-emerald-400", textClass: "text-emerald-400" };
     default:
-      return { widthClass: "w-0",    colorClass: "bg-white/20",    textClass: "text-vault-text-faint" };
+      return { widthClass: "w-0",    colorClass: "bg-vault-overlay/20",    textClass: "text-vault-text-faint" };
   }
 }
 
@@ -83,7 +83,7 @@ export function PasswordGenerator() {
   }
 
   return (
-    <section className="mt-6 rounded-vault-panel border border-white/8 bg-vault-card p-6">
+    <section className="mt-6 rounded-vault-panel border border-vault-border bg-vault-card p-6">
 
       {/* Section header */}
       <div>
@@ -104,7 +104,7 @@ export function PasswordGenerator() {
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-vault-text-muted">Length</span>
-            <span className="rounded-vault-chip border border-white/8 bg-black/30 px-2.5 py-1 text-xs font-medium text-vault-accent/70">
+            <span className="rounded-vault-chip border border-vault-border bg-vault-inset px-2.5 py-1 text-xs font-medium text-vault-accent/70">
               {options.length}
             </span>
           </div>
@@ -132,7 +132,7 @@ export function PasswordGenerator() {
           ).map(({ key, label }) => (
             <label
               key={key}
-              className="flex cursor-pointer items-center gap-3 rounded-vault-card border border-white/8 bg-black/20 p-3 text-sm text-vault-text-muted transition has-[:checked]:border-vault-accent/20 has-[:checked]:bg-vault-accent/[0.05] has-[:checked]:text-vault-text/80"
+              className="flex cursor-pointer items-center gap-3 rounded-vault-card border border-vault-border bg-vault-inset p-3 text-sm text-vault-text-muted transition has-[:checked]:border-vault-accent/20 has-[:checked]:bg-vault-accent/[0.05] has-[:checked]:text-vault-text/80"
             >
               <input
                 type="checkbox"
@@ -157,7 +157,7 @@ export function PasswordGenerator() {
           <button
             type="button"
             onClick={handleCopy}
-            className="rounded-vault-input border border-white/10 px-6 py-3 text-sm font-medium text-vault-text-muted transition hover:bg-white/[0.04] hover:text-vault-text/80"
+            className="rounded-vault-input border border-vault-border px-6 py-3 text-sm font-medium text-vault-text-muted transition hover:bg-vault-overlay/[0.04] hover:text-vault-text/80"
           >
             Copy
           </button>
@@ -167,7 +167,7 @@ export function PasswordGenerator() {
 
         {/* Output + strength */}
         {generatedPassword && (
-          <div className="rounded-vault-card border border-white/8 bg-black/30 p-5">
+          <div className="rounded-vault-card border border-vault-border bg-vault-inset p-5">
             <p className="text-xs font-medium uppercase tracking-widest text-vault-text-faint">
               Generated password
             </p>
@@ -183,7 +183,7 @@ export function PasswordGenerator() {
                   </span>
                   <span className="text-xs text-vault-text-faint">{strength.description}</span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-vault-overlay/10">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${strengthStyles.widthClass} ${strengthStyles.colorClass}`}
                   />

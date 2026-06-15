@@ -49,7 +49,7 @@ const navItems: {
 
 // Shared class strings — mirrors VaultUnlockCard's pattern
 const panelCls =
-  "rounded-vault-panel border border-white/8 bg-vault-card shadow-2xl shadow-black/40";
+  "rounded-vault-panel border border-vault-border bg-vault-card shadow-2xl shadow-black/40";
 
 const navItemBaseCls =
   "w-full rounded-vault-chip px-3 py-2.5 text-left transition";
@@ -57,7 +57,7 @@ const navItemBaseCls =
 const navItemActiveCls = "border border-vault-accent/20 bg-vault-accent/[0.08]";
 
 const navItemInactiveCls =
-  "border border-transparent hover:bg-white/[0.04]";
+  "border border-transparent hover:bg-vault-overlay/[0.04]";
 
 export function DashboardShell({
   passwordsSection,
@@ -79,7 +79,7 @@ export function DashboardShell({
           className={`flex flex-col p-5 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] ${panelCls}`}
         >
           {/* Persistent identity: monogram + app name */}
-          <div className="flex items-center gap-3 border-b border-white/8 pb-5">
+          <div className="flex items-center gap-3 border-b border-vault-border pb-5">
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-vault-chip bg-vault-accent/10 font-display text-sm font-medium text-vault-accent">
               {bMemoryVaultTheme.ownerInitial}
             </div>
@@ -118,7 +118,7 @@ export function DashboardShell({
           </nav>
 
           {/* ZK callout — pinned to bottom */}
-          <div className="mt-auto border-t border-white/8 pt-5">
+          <div className="mt-auto border-t border-vault-border pt-5">
             <div className="rounded-vault-chip border border-vault-support/15 bg-vault-support/[0.06] px-4 py-3">
               <p className="text-xs font-medium text-vault-support">
                 Zero-knowledge vault

@@ -36,7 +36,7 @@ export function BackupSettingsPanel() {
     return createVault({
       profileId,
       getToken,
-      name: "B’s Main Vault",
+      name: "B's Main Vault",
       description: "Default vault for imported saved keys and little notes.",
     });
   }
@@ -167,19 +167,21 @@ export function BackupSettingsPanel() {
   }
 
   return (
-    <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <section className="rounded-vault-panel border border-vault-border bg-vault-card p-6">
       <div>
-        <p className="text-sm text-pink-300">Encrypted Backup</p>
-        <h2 className="mt-2 text-2xl font-bold text-white">
+        <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
+          Encrypted Backup
+        </p>
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
           Import / export vault backup
         </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">
+        <p className="mt-1.5 text-sm leading-relaxed text-vault-text-muted">
           Export and import encrypted saved keys and notes. Backup files contain
           ciphertext, not readable passwords or note content.
         </p>
       </div>
 
-      <div className="mt-5 rounded-2xl border border-yellow-300/20 bg-yellow-500/10 p-4">
+      <div className="mt-5 rounded-vault-card border border-yellow-300/20 bg-yellow-500/10 p-4">
         <p className="text-sm font-semibold text-yellow-100">
           Keep backups private.
         </p>
@@ -194,7 +196,7 @@ export function BackupSettingsPanel() {
           type="button"
           onClick={handleExport}
           disabled={isExporting || isImporting}
-          className="rounded-full bg-pink-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-pink-300 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-vault-input bg-vault-accent px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isExporting ? "Exporting..." : "Export Encrypted Backup"}
         </button>
@@ -203,7 +205,7 @@ export function BackupSettingsPanel() {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isExporting || isImporting}
-          className="rounded-full border border-white/10 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-vault-input border border-vault-border px-5 py-3 text-sm font-semibold text-vault-text-muted transition hover:bg-vault-overlay/10 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isImporting ? "Importing..." : "Import Encrypted Backup"}
         </button>
@@ -217,7 +219,7 @@ export function BackupSettingsPanel() {
         />
       </div>
 
-      {message && <p className="mt-4 text-sm text-blue-200">{message}</p>}
+      {message && <p className="mt-4 text-sm text-vault-text-muted">{message}</p>}
     </section>
   );
 }

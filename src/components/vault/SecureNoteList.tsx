@@ -24,12 +24,12 @@ function relativeDate(iso: string): string {
 }
 
 const inputCls =
-  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "w-full rounded-vault-input border border-vault-border bg-vault-inset px-4 py-3 text-sm " +
   "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const actionBtnCls =
-  "rounded-vault-chip border border-white/8 px-2.5 py-1 text-xs font-medium " +
-  "text-vault-text-muted transition hover:bg-white/[0.06] hover:text-vault-text/80";
+  "rounded-vault-chip border border-vault-border px-2.5 py-1 text-xs font-medium " +
+  "text-vault-text-muted transition hover:bg-vault-overlay/[0.06] hover:text-vault-text/80";
 
 export function SecureNoteList({
   refreshKey,
@@ -155,7 +155,7 @@ export function SecureNoteList({
 
       {/* Defense-in-depth locked notice */}
       {!isUnlocked && (
-        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+        <div className="mt-5 rounded-vault-chip border border-vault-border bg-vault-overlay/[0.03] px-4 py-3">
           <p className="text-xs text-vault-text-muted">
             Unlock the vault to view and search secure notes.
           </p>
@@ -164,7 +164,7 @@ export function SecureNoteList({
 
       {/* Empty states */}
       {isUnlocked && notes.length === 0 && (
-        <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
+        <div className="mt-5 rounded-vault-card border border-vault-border bg-vault-card p-8 text-center">
           <p className="font-display text-base font-medium text-vault-text/70">
             No secure notes yet.
           </p>
@@ -175,7 +175,7 @@ export function SecureNoteList({
       )}
 
       {isUnlocked && notes.length > 0 && filteredNotes.length === 0 && (
-        <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
+        <div className="mt-5 rounded-vault-card border border-vault-border bg-vault-card p-8 text-center">
           <p className="font-display text-base font-medium text-vault-text/70">
             No matches found.
           </p>
@@ -207,7 +207,7 @@ export function SecureNoteList({
           return (
             <div
               key={note.id}
-              className="flex flex-col rounded-vault-card border border-white/8 border-l-2 border-l-vault-accent/20 bg-vault-card p-4"
+              className="flex flex-col rounded-vault-card border border-vault-border border-l-2 border-l-vault-accent/20 bg-vault-card p-4"
             >
               {/* Title + favorite heart */}
               <div className="flex items-start gap-2">

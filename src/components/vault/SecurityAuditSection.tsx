@@ -99,7 +99,7 @@ export function SecurityAuditSection() {
   }, [isLoaded, user, isUnlocked, vaultKey]);
 
   return (
-    <section className="mt-6 rounded-vault-panel border border-white/8 bg-vault-card p-6">
+    <section className="mt-6 rounded-vault-panel border border-vault-border bg-vault-card p-6">
 
       {/* Section header */}
       <div>
@@ -114,7 +114,7 @@ export function SecurityAuditSection() {
 
       {/* Locked notice */}
       {!isUnlocked && (
-        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+        <div className="mt-5 rounded-vault-chip border border-vault-border bg-vault-overlay/[0.03] px-4 py-3">
           <p className="text-xs text-vault-text-muted">
             Unlock your vault to analyze saved passwords locally.
           </p>
@@ -123,7 +123,7 @@ export function SecurityAuditSection() {
 
       {/* Loading */}
       {isUnlocked && isLoading && (
-        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+        <div className="mt-5 rounded-vault-chip border border-vault-border bg-vault-overlay/[0.03] px-4 py-3">
           <p className="text-xs text-vault-text-muted">Running local safety check...</p>
         </div>
       )}
@@ -132,7 +132,7 @@ export function SecurityAuditSection() {
         <div className="mt-6 grid gap-5">
 
           {/* Score card */}
-          <div className="rounded-vault-card border border-white/8 bg-black/30 p-5">
+          <div className="rounded-vault-card border border-vault-border bg-vault-inset p-5">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
                 <p className="text-xs font-medium text-vault-text-faint">Vault security score</p>
@@ -149,7 +149,7 @@ export function SecurityAuditSection() {
                 </p>
               </div>
               <div className="w-full sm:w-64">
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                <div className="h-1.5 overflow-hidden rounded-full bg-vault-overlay/10">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${getScoreBarClass(auditResult.score)}`}
                   />
@@ -160,7 +160,7 @@ export function SecurityAuditSection() {
 
           {/* Stat cards */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-            <div className="rounded-vault-card border border-white/8 bg-vault-card p-4">
+            <div className="rounded-vault-card border border-vault-border bg-vault-card p-4">
               <p className="text-xs text-vault-text-faint">Saved keys</p>
               <p className="mt-2 font-display text-2xl font-medium text-vault-text">
                 {auditResult.totalItems}

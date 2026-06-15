@@ -15,7 +15,7 @@ type VaultMode = "loading" | "setup" | "unlock";
 
 // Shared class strings — every token comes from the theme system
 const inputCls =
-  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "w-full rounded-vault-input border border-vault-border bg-vault-inset px-4 py-3 text-sm " +
   "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const primaryBtnCls =
@@ -24,7 +24,7 @@ const primaryBtnCls =
 
 const cardShellCls = "flex min-h-[56vh] items-center justify-center px-4 py-12";
 const cardInnerCls =
-  "w-full max-w-[360px] rounded-vault-card border border-white/8 bg-vault-card " +
+  "w-full max-w-[360px] rounded-vault-card border border-vault-border bg-vault-card " +
   "p-8 shadow-2xl shadow-black/50 ring-1 ring-vault-accent/10";
 
 export function VaultUnlockCard() {
@@ -233,7 +233,7 @@ export function VaultUnlockCard() {
             </p>
           </div>
 
-          <div className="mb-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+          <div className="mb-5 rounded-vault-chip border border-vault-border bg-vault-overlay/[0.03] px-4 py-3">
             <p className="text-xs leading-relaxed text-vault-text-muted">
               {bMemoryVaultTheme.copy.setupNotice}
             </p>

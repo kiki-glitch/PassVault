@@ -4,13 +4,15 @@ import { UserProfile } from "@clerk/nextjs";
 
 export function AccountSecurityPanel() {
   return (
-    <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <section className="rounded-vault-panel border border-vault-border bg-vault-card p-6">
       <div>
-        <p className="text-sm text-blue-300">Account Security</p>
-        <h2 className="mt-2 text-2xl font-bold text-white">
+        <p className="text-xs font-medium uppercase tracking-widest text-vault-support/70">
+          Account Security
+        </p>
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
           Login, MFA & passkeys
         </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">
+        <p className="mt-1.5 text-sm leading-relaxed text-vault-text-muted">
           Clerk manages account login security, including authentication
           methods, sessions, and profile details. Your vault master password is
           separate and is never sent to Clerk or Supabase.
@@ -18,7 +20,7 @@ export function AccountSecurityPanel() {
       </div>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-4">
+        <div className="rounded-vault-card border border-emerald-300/20 bg-emerald-500/10 p-4">
           <p className="text-sm font-semibold text-emerald-100">
             Account login
           </p>
@@ -28,7 +30,7 @@ export function AccountSecurityPanel() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-pink-300/20 bg-pink-500/10 p-4">
+        <div className="rounded-vault-card border border-pink-300/20 bg-pink-500/10 p-4">
           <p className="text-sm font-semibold text-pink-100">
             Vault master password
           </p>
@@ -39,7 +41,7 @@ export function AccountSecurityPanel() {
         </div>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-black/30 p-4">
+      <div className="mt-6 overflow-hidden rounded-vault-card border border-vault-border bg-vault-inset p-4">
         <UserProfile routing="hash" />
       </div>
     </section>

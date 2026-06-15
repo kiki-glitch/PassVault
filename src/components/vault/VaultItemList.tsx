@@ -11,12 +11,12 @@ import { EditPasswordForm } from "./EditPasswordForm";
 import { bMemoryVaultTheme } from "@/config/themes";
 
 const inputCls =
-  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "w-full rounded-vault-input border border-vault-border bg-vault-inset px-4 py-3 text-sm " +
   "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const actionBtnCls =
-  "rounded-vault-chip border border-white/8 px-2.5 py-1 text-xs font-medium " +
-  "text-vault-text-muted transition hover:bg-white/[0.06] hover:text-vault-text/80";
+  "rounded-vault-chip border border-vault-border px-2.5 py-1 text-xs font-medium " +
+  "text-vault-text-muted transition hover:bg-vault-overlay/[0.06] hover:text-vault-text/80";
 
 export function VaultItemList() {
   const { user, isLoaded } = useUser();
@@ -186,7 +186,7 @@ export function VaultItemList() {
 
       {/* Defense-in-depth locked notice */}
       {!isUnlocked && (
-        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+        <div className="mt-5 rounded-vault-chip border border-vault-border bg-vault-overlay/[0.03] px-4 py-3">
           <p className="text-xs text-vault-text-muted">
             Unlock the vault to view and search saved passwords.
           </p>
@@ -195,7 +195,7 @@ export function VaultItemList() {
 
       {/* Empty states */}
       {isUnlocked && items.length === 0 && (
-        <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
+        <div className="mt-5 rounded-vault-card border border-vault-border bg-vault-card p-8 text-center">
           <p className="font-display text-base font-medium text-vault-text/70">
             No saved passwords yet.
           </p>
@@ -206,7 +206,7 @@ export function VaultItemList() {
       )}
 
       {isUnlocked && items.length > 0 && filteredItems.length === 0 && (
-        <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
+        <div className="mt-5 rounded-vault-card border border-vault-border bg-vault-card p-8 text-center">
           <p className="font-display text-base font-medium text-vault-text/70">
             No matches found.
           </p>
@@ -241,7 +241,7 @@ export function VaultItemList() {
           return (
             <div
               key={item.id}
-              className="flex flex-col rounded-vault-card border border-white/8 bg-vault-card p-4"
+              className="flex flex-col rounded-vault-card border border-vault-border bg-vault-card p-4"
             >
               {/* Tile header: initial badge + title / username / url */}
               <div className="flex items-start gap-3">
@@ -281,7 +281,7 @@ export function VaultItemList() {
               </div>
 
               {/* Password row */}
-              <div className="mt-3 rounded-vault-chip border border-white/8 bg-black/30 px-3 py-2">
+              <div className="mt-3 rounded-vault-chip border border-vault-border bg-vault-inset px-3 py-2">
                 <p className="font-mono text-xs text-vault-text/70">
                   {isPasswordVisible ? item.password : "••••••••••••"}
                 </p>

@@ -13,6 +13,12 @@ export type ThemeColors = {
   darkForeground: string;
   darkForegroundMuted: string;
   darkForegroundFaint: string;
+  insetSurface: string;
+  borderColor: string;
+  overlayColor: string;
+  darkInsetSurface: string;
+  darkBorderColor: string;
+  darkOverlayColor: string;
 };
 
 export type ThemeFonts = {
