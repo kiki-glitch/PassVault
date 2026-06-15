@@ -25,195 +25,201 @@ function getScoreBarClass(score: number) {
 }
 
 function getSeverityClass(severity: "low" | "medium" | "high") {
-  if (severity === "high") {
-    return "border-red-300/20 bg-red-500/10 text-red-100";
-  }
-
-  if (severity === "medium") {
-    return "border-orange-300/20 bg-orange-500/10 text-orange-100";
-  }
-
-  return "border-blue-300/20 bg-blue-500/10 text-blue-100";
+  if (severity === "high")   return "border-red-400/20 bg-red-500/10 text-red-100";
+  if (severity === "medium") return "border-orange-400/20 bg-orange-500/10 text-orange-100";
+  return "border-blue-400/20 bg-blue-500/10 text-blue-100";
 }
 
-export function SecurityAuditSection(){
-    const {user, isLoaded} = useUser();
-    const {getToken} = useAuth();
-    const {isUnlocked, vaultKey} = useVault();
+export function SecurityAuditSection() {
+  const { user, isLoaded } = useUser();
+  const { getToken } = useAuth();
+  const { isUnlocked, vaultKey } = useVault();
 
-    const [items, setItems] = useState<DecryptedVaultItem[]>([]);
-    const [message, setMessage] = useState("Unlock the vault to run safety check.");
-    const [isLoading, setIsLoading] = useState(false);
+  const [items, setItems] = useState<DecryptedVaultItem[]>([]);
+  const [message, setMessage] = useState("Unlock the vault to run safety check.");
+  const [isLoading, setIsLoading] = useState(false);
 
-    const auditResult: PasswordAuditResult | null = useMemo(() => {
-        if (!isUnlocked || items.length === 0) {
-            return null;
-        }
-
-        return auditPasswords(items);
-    },[isUnlocked,items]);      
-
-    async function loadItemsForAudit() {
-        if(!isLoaded || !user) return;
-
-        if(!isUnlocked || !vaultKey){
-            setItems([]);
-            setMessage("Unlock the vault to run safety check.");
-            return;
-        }
-
-        try{
-            setIsLoading(true);
-            setMessage("Decrypting saved keys locally for safety check...");
-
-            const vaults = await getVaults(getToken);
-
-            if(vaults.length === 0){
-                setItems([]);
-                setMessage("No vault found yet. Add passwords before running safety check.");
-                return;
-            }
-
-            const encryptedRows = await getVaultItems({
-                getToken,
-                vaultId: vaults[0].id,
-            });
-
-            const decryptedItems = await Promise.all(
-                encryptedRows.map((row) =>
-                decryptVaultItem({
-                    row,
-                    key: vaultKey,
-                })
-                )
-            );
-
-            setItems(decryptedItems);
-            setMessage("Safety check completed locally in your browser.");
-        } catch (error) {
-        console.error("Security audit failed:", error);
-            setItems([]);
-            setMessage("Could not run safety check. Check console.");
-        } finally {
-            setIsLoading(false);
-        }
+  const auditResult: PasswordAuditResult | null = useMemo(() => {
+    if (!isUnlocked || items.length === 0) {
+      return null;
     }
 
-    useEffect(() => {
-        loadItemsForAudit();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoaded, user, isUnlocked, vaultKey]);
+    return auditPasswords(items);
+  }, [isUnlocked, items]);
 
-    return (
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div>
-                <p className="text-sm text-pink-300">{bMemoryVaultTheme.labels.security}</p>
-                <h2 className="mt-2 text-2xl font-bold">Security audit</h2>
-                <p className="mt-2 text-sm text-slate-400">{message}</p>
+  async function loadItemsForAudit() {
+    if (!isLoaded || !user) return;
+
+    if (!isUnlocked || !vaultKey) {
+      setItems([]);
+      setMessage("Unlock the vault to run safety check.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setMessage("Decrypting saved keys locally for safety check...");
+
+      const vaults = await getVaults(getToken);
+
+      if (vaults.length === 0) {
+        setItems([]);
+        setMessage("No vault found yet. Add passwords before running safety check.");
+        return;
+      }
+
+      const encryptedRows = await getVaultItems({
+        getToken,
+        vaultId: vaults[0].id,
+      });
+
+      const decryptedItems = await Promise.all(
+        encryptedRows.map((row) =>
+          decryptVaultItem({
+            row,
+            key: vaultKey,
+          })
+        )
+      );
+
+      setItems(decryptedItems);
+      setMessage("Safety check completed locally in your browser.");
+    } catch (error) {
+      console.error("Security audit failed:", error);
+      setItems([]);
+      setMessage("Could not run safety check. Check console.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadItemsForAudit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, user, isUnlocked, vaultKey]);
+
+  return (
+    <section className="mt-6 rounded-vault-panel border border-white/8 bg-vault-card p-6">
+
+      {/* Section header */}
+      <div>
+        <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
+          {bMemoryVaultTheme.labels.security}
+        </p>
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+          Safety check
+        </h2>
+        <p className="mt-1.5 text-sm text-white/45">{message}</p>
+      </div>
+
+      {/* Locked notice */}
+      {!isUnlocked && (
+        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+          <p className="text-xs text-white/40">
+            Unlock your vault to analyze saved passwords locally.
+          </p>
+        </div>
+      )}
+
+      {/* Loading */}
+      {isUnlocked && isLoading && (
+        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+          <p className="text-xs text-white/40">Running local safety check...</p>
+        </div>
+      )}
+
+      {isUnlocked && auditResult && (
+        <div className="mt-6 grid gap-5">
+
+          {/* Score card */}
+          <div className="rounded-vault-card border border-white/8 bg-black/30 p-5">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <div>
+                <p className="text-xs font-medium text-white/40">Vault security score</p>
+                <p className="mt-1 font-display text-4xl font-medium text-white">
+                  {auditResult.score}
+                  <span className="ml-0.5 text-xl text-white/30">/100</span>
+                </p>
+                <p className={`mt-1 text-sm font-medium ${
+                  auditResult.score >= 85 ? "text-emerald-400" :
+                  auditResult.score >= 70 ? "text-blue-400"   :
+                  auditResult.score >= 50 ? "text-orange-400" : "text-red-400"
+                }`}>
+                  {getScoreLabel(auditResult.score)}
+                </p>
+              </div>
+              <div className="w-full sm:w-64">
+                <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${getScoreBarClass(auditResult.score)}`}
+                  />
+                </div>
+              </div>
             </div>
+          </div>
 
-            {!isUnlocked && (
-                <div className="mt-6 rounded-2xl border border-yellow-300/20 bg-yellow-500/10 p-4">
-                    <p className="text-sm text-yellow-100">
-                        Unlock your vault to analyze saved passwords locally.
-                    </p>
+          {/* Stat cards */}
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="rounded-vault-card border border-white/8 bg-vault-card p-4">
+              <p className="text-xs text-white/40">Saved keys</p>
+              <p className="mt-2 font-display text-2xl font-medium text-white">
+                {auditResult.totalItems}
+              </p>
+            </div>
+            <div className="rounded-vault-card border border-red-400/20 bg-red-500/10 p-4">
+              <p className="text-xs text-red-200/70">Weak</p>
+              <p className="mt-2 font-display text-2xl font-medium text-red-100">
+                {auditResult.weakCount}
+              </p>
+            </div>
+            <div className="rounded-vault-card border border-orange-400/20 bg-orange-500/10 p-4">
+              <p className="text-xs text-orange-200/70">Short</p>
+              <p className="mt-2 font-display text-2xl font-medium text-orange-100">
+                {auditResult.shortCount}
+              </p>
+            </div>
+            <div className="rounded-vault-card border border-amber-400/20 bg-amber-500/10 p-4">
+              <p className="text-xs text-amber-200/70">Reused</p>
+              <p className="mt-2 font-display text-2xl font-medium text-amber-100">
+                {auditResult.reusedCount}
+              </p>
+            </div>
+            <div className="rounded-vault-card border border-blue-400/20 bg-blue-500/10 p-4">
+              <p className="text-xs text-blue-200/70">No URL</p>
+              <p className="mt-2 font-display text-2xl font-medium text-blue-100">
+                {auditResult.missingUrlCount}
+              </p>
+            </div>
+          </div>
+
+          {/* Issues */}
+          {auditResult.issues.length > 0 ? (
+            <div className="grid gap-3">
+              <h3 className="font-display text-base font-medium text-white">
+                Issues found
+              </h3>
+              {auditResult.issues.map((issue, index) => (
+                <div
+                  key={`${issue.itemId}-${issue.type}-${index}`}
+                  className={`rounded-vault-card border p-4 ${getSeverityClass(issue.severity)}`}
+                >
+                  <p className="text-sm font-medium">{issue.title}</p>
+                  <p className="mt-1 text-sm opacity-75">{issue.message}</p>
                 </div>
-            )}
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-vault-card border border-emerald-400/20 bg-emerald-500/10 p-4">
+              <p className="text-sm font-medium text-emerald-100">No issues found.</p>
+              <p className="mt-1 text-sm text-emerald-100/75">
+                Your saved passwords look strong based on local checks.
+              </p>
+            </div>
+          )}
 
-            {isUnlocked && isLoading && (
-                <div className="mt-6 rounded-2xl border border-blue-300/20 bg-blue-500/10 p-4">
-                    <p className="text-sm text-blue-100">Running local audit...</p>
-                </div>
-            )}
+        </div>
+      )}
 
-            {isUnlocked && auditResult && (
-                <div className="mt-6 grid gap-6">
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                    <div>
-                        <p className="text-sm text-slate-400">Vault security score</p>
-                        <h3 className="mt-1 text-4xl font-bold text-white">
-                            {auditResult.score}/100
-                        </h3>
-                        <p className="mt-1 text-sm text-slate-400">
-                            {getScoreLabel(auditResult.score)}
-                        </p>
-                    </div>
-
-                    <div className="w-full sm:w-64">
-                        <div className="h-3 overflow-hidden rounded-full bg-slate-700/70">
-                        <div
-                            className={`h-full rounded-full transition-all duration-300 ${getScoreBarClass(
-                            auditResult.score
-                            )}`}
-                        />
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                        <p className="text-sm text-slate-400">Saved keys</p>
-                        <p className="mt-2 text-2xl font-bold">{auditResult.totalItems}</p>
-                    </div>
-
-                    <div className="rounded-2xl border border-red-300/20 bg-red-500/10 p-4">
-                        <p className="text-sm text-red-100">Weak</p>
-                        <p className="mt-2 text-2xl font-bold">{auditResult.weakCount}</p>
-                    </div>
-
-                    <div className="rounded-2xl border border-orange-300/20 bg-orange-500/10 p-4">
-                        <p className="text-sm text-orange-100">Short</p>
-                        <p className="mt-2 text-2xl font-bold">{auditResult.shortCount}</p>
-                    </div>
-
-                    <div className="rounded-2xl border border-pink-300/20 bg-pink-500/10 p-4">
-                        <p className="text-sm text-pink-100">Reused</p>
-                        <p className="mt-2 text-2xl font-bold">
-                        {auditResult.reusedCount}
-                    </p>
-                    </div>
-
-                    <div className="rounded-2xl border border-blue-300/20 bg-blue-500/10 p-4">
-                        <p className="text-sm text-blue-100">Missing URLs</p>
-                        <p className="mt-2 text-2xl font-bold">
-                            {auditResult.missingUrlCount}
-                        </p>
-                    </div>
-                </div>
-
-                {auditResult.issues.length > 0 ? (
-                    <div className="grid gap-3">
-                        <h3 className="text-lg font-semibold text-white">
-                            Issues found
-                        </h3>
-
-                        {auditResult.issues.map((issue, index) => (
-                            <div
-                            key={`${issue.itemId}-${issue.type}-${index}`}
-                            className={`rounded-2xl border p-4 ${getSeverityClass(
-                                issue.severity
-                            )}`}
-                            >
-                            <p className="text-sm font-semibold">{issue.title}</p>
-                            <p className="mt-1 text-sm opacity-80">{issue.message}</p>
-                            </div>
-                        ))}
-                        </div>
-                    ) : (
-                        <div className="rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-4">
-                        <p className="text-sm font-semibold text-emerald-100">
-                            No issues found.
-                        </p>
-                        <p className="mt-1 text-sm text-emerald-100/80">
-                            Your saved passwords look strong based on local checks.
-                        </p>
-                        </div>
-                    )}
-                    </div>
-                )}
-        </section>
+    </section>
   );
-
 }
