@@ -9,6 +9,28 @@ import { EditSecureNoteForm } from "./EditSecureNoteForm";
 import type { DecryptedSecureNote } from "@/types/vault";
 import { bMemoryVaultTheme } from "@/config/themes";
 
+function relativeDate(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const minutes = Math.floor(diff / 60_000);
+  if (minutes < 60) return minutes <= 1 ? "just now" : `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.floor(months / 12)}y ago`;
+}
+
+const inputCls =
+  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+
+const actionBtnCls =
+  "rounded-vault-chip border border-white/8 px-2.5 py-1 text-xs font-medium " +
+  "text-white/55 transition hover:bg-white/[0.06] hover:text-white/80";
+
 export function SecureNoteList({
   refreshKey,
   onChanged,
@@ -107,108 +129,126 @@ export function SecureNoteList({
   }, [isLoaded, user, isUnlocked, vaultKey, refreshKey]);
 
   return (
-    <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
+    <div className="mt-6">
+      {/* Section header */}
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-sm text-blue-300">{bMemoryVaultTheme.labels.notes}</p>
-          <h2 className="mt-2 text-2xl font-bold">{bMemoryVaultTheme.labels.notes}</h2>
-          <p className="mt-2 text-sm text-slate-400">{message}</p>
+          <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
+            {bMemoryVaultTheme.labels.notes}
+          </p>
+          <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+            {bMemoryVaultTheme.labels.notes}
+          </h2>
+          <p className="mt-1.5 text-sm text-white/45">{message}</p>
         </div>
 
-        <label className="grid gap-2 lg:w-80">
-          <span className="text-sm text-slate-300">Search notes</span>
+        <label className="lg:w-72">
           <input
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
             disabled={!isUnlocked}
-            className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition focus:border-blue-300 disabled:cursor-not-allowed disabled:opacity-50"
+            className={inputCls + " disabled:cursor-not-allowed disabled:opacity-40"}
             placeholder="Search title or note content"
           />
         </label>
       </div>
 
+      {/* Defense-in-depth locked notice */}
       {!isUnlocked && (
-        <div className="mt-6 rounded-2xl border border-yellow-300/20 bg-yellow-500/10 p-4">
-          <p className="text-sm text-yellow-100">
+        <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
+          <p className="text-xs text-white/40">
             Unlock the vault to view and search secure notes.
           </p>
         </div>
       )}
 
+      {/* Empty states */}
       {isUnlocked && notes.length === 0 && (
-        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-6 text-center">
-          <p className="text-lg font-semibold text-white">
+        <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
+          <p className="font-display text-base font-medium text-white/70">
             No secure notes yet.
           </p>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-1.5 text-sm text-white/35">
             Add your first private note using the form below.
           </p>
         </div>
       )}
 
       {isUnlocked && notes.length > 0 && filteredNotes.length === 0 && (
-        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-6 text-center">
-          <p className="text-lg font-semibold text-white">No matches found.</p>
-          <p className="mt-2 text-sm text-slate-400">
+        <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
+          <p className="font-display text-base font-medium text-white/70">
+            No matches found.
+          </p>
+          <p className="mt-1.5 text-sm text-white/35">
             Try searching by note title or content.
           </p>
         </div>
       )}
 
-      <div className="mt-6 grid gap-4">
+      {/* Note card grid — minmax(260px) wider than password tiles for prose readability */}
+      <div className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
         {filteredNotes.map((note) => {
           if (editingNoteId === note.id) {
             return (
-              <EditSecureNoteForm
-                key={note.id}
-                note={note}
-                onCancel={() => setEditingNoteId(null)}
-                onUpdated={async () => {
-                  setEditingNoteId(null);
-                  setMessage("Note updated securely.");
-                  onChanged();
-                }}
-              />
+              <div key={note.id} className="col-span-full">
+                <EditSecureNoteForm
+                  note={note}
+                  onCancel={() => setEditingNoteId(null)}
+                  onUpdated={async () => {
+                    setEditingNoteId(null);
+                    setMessage("Note updated securely.");
+                    onChanged();
+                  }}
+                />
+              </div>
             );
           }
 
           return (
             <div
               key={note.id}
-              className="rounded-2xl border border-white/10 bg-black/30 p-4"
+              className="flex flex-col rounded-vault-card border border-white/8 border-l-2 border-l-vault-accent/20 bg-vault-card p-4"
             >
-              <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-semibold text-white">
-                      {note.title}
-                    </h3>
+              {/* Title + favorite heart */}
+              <div className="flex items-start gap-2">
+                <h3 className="flex-1 font-display text-base font-medium leading-snug text-white">
+                  {note.title}
+                </h3>
+                {note.favorite && (
+                  <svg
+                    className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-vault-accent/60"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                  </svg>
+                )}
+              </div>
 
-                    {note.favorite && (
-                      <span className="rounded-full bg-blue-400/20 px-2 py-1 text-xs text-blue-200">
-                        {bMemoryVaultTheme.labels.favorites}
-                      </span>
-                    )}
-                  </div>
+              {/* Content preview — prose treatment */}
+              <p className="mt-2.5 line-clamp-4 text-sm leading-relaxed text-white/55">
+                {note.content}
+              </p>
 
-                  <p className="mt-3 whitespace-pre-wrap text-sm text-slate-300">
-                    {note.content}
-                  </p>
-                </div>
+              {/* Timestamp + actions */}
+              <div className="mt-auto flex items-center justify-between pt-4">
+                <span className="text-xs text-white/30">
+                  added {relativeDate(note.createdAt)}
+                </span>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-1.5">
                   <button
                     type="button"
                     onClick={() => setEditingNoteId(note.id)}
-                    className="rounded-full border border-blue-300/30 px-4 py-2 text-xs font-semibold text-blue-200 hover:bg-blue-300/10"
+                    className={actionBtnCls}
                   >
                     Edit
                   </button>
-
                   <button
                     type="button"
                     onClick={() => handleDelete(note)}
-                    className="rounded-full border border-red-300/30 px-4 py-2 text-xs font-semibold text-red-200 hover:bg-red-300/10"
+                    className="rounded-vault-chip border border-transparent px-2.5 py-1 text-xs font-medium text-red-400/55 transition hover:bg-red-400/10 hover:text-red-300"
                   >
                     Delete
                   </button>
