@@ -182,10 +182,10 @@ export function BackupSettingsPanel() {
       </div>
 
       <div className="mt-5 rounded-vault-card border border-yellow-300/20 bg-yellow-500/10 p-4">
-        <p className="text-sm font-semibold text-yellow-100">
+        <p className="text-sm font-semibold text-yellow-900 dark:text-yellow-100">
           Keep backups private.
         </p>
-        <p className="mt-2 text-sm leading-6 text-yellow-100/80">
+        <p className="mt-2 text-sm leading-6 text-yellow-900/80 dark:text-yellow-100/80">
           The backup is encrypted, but someone with both this file and the vault
           master password may be able to restore the vault.
         </p>

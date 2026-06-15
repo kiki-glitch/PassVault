@@ -5,6 +5,7 @@ import { UserButton } from "@clerk/nextjs";
 import { bMemoryVaultTheme } from "@/config/themes";
 import { useVault } from "@/components/vault/VaultProvider";
 import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import type { DashboardSection } from "@/types/navigation";
 
 type DashboardShellProps = {
@@ -86,6 +87,9 @@ export function DashboardShell({
             <p className="font-display text-sm font-medium text-vault-text/70">
               {bMemoryVaultTheme.appName}
             </p>
+            <span className="ml-auto">
+              <ThemeToggle />
+            </span>
           </div>
 
           {/* Navigation */}
@@ -152,7 +156,10 @@ export function DashboardShell({
                     </p>
                   </div>
 
-                  <UserButton />
+                  <div className="flex items-center gap-3">
+                    <ThemeToggle />
+                    <UserButton />
+                  </div>
                 </div>
               </header>
 

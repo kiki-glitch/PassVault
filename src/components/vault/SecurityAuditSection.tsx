@@ -25,9 +25,9 @@ function getScoreBarClass(score: number) {
 }
 
 function getSeverityClass(severity: "low" | "medium" | "high") {
-  if (severity === "high")   return "border-red-400/20 bg-red-500/10 text-red-100";
-  if (severity === "medium") return "border-orange-400/20 bg-orange-500/10 text-orange-100";
-  return "border-blue-400/20 bg-blue-500/10 text-blue-100";
+  if (severity === "high")   return "border-red-400/20 bg-red-500/10 text-red-900 dark:text-red-100";
+  if (severity === "medium") return "border-orange-400/20 bg-orange-500/10 text-orange-900 dark:text-orange-100";
+  return "border-blue-400/20 bg-blue-500/10 text-blue-900 dark:text-blue-100";
 }
 
 export function SecurityAuditSection() {
@@ -167,26 +167,26 @@ export function SecurityAuditSection() {
               </p>
             </div>
             <div className="rounded-vault-card border border-red-400/20 bg-red-500/10 p-4">
-              <p className="text-xs text-red-200/70">Weak</p>
-              <p className="mt-2 font-display text-2xl font-medium text-red-100">
+              <p className="text-xs text-red-700 dark:text-red-200/70">Weak</p>
+              <p className="mt-2 font-display text-2xl font-medium text-red-800 dark:text-red-100">
                 {auditResult.weakCount}
               </p>
             </div>
             <div className="rounded-vault-card border border-orange-400/20 bg-orange-500/10 p-4">
-              <p className="text-xs text-orange-200/70">Short</p>
-              <p className="mt-2 font-display text-2xl font-medium text-orange-100">
+              <p className="text-xs text-orange-700 dark:text-orange-200/70">Short</p>
+              <p className="mt-2 font-display text-2xl font-medium text-orange-800 dark:text-orange-100">
                 {auditResult.shortCount}
               </p>
             </div>
             <div className="rounded-vault-card border border-amber-400/20 bg-amber-500/10 p-4">
-              <p className="text-xs text-amber-200/70">Reused</p>
-              <p className="mt-2 font-display text-2xl font-medium text-amber-100">
+              <p className="text-xs text-amber-700 dark:text-amber-200/70">Reused</p>
+              <p className="mt-2 font-display text-2xl font-medium text-amber-800 dark:text-amber-100">
                 {auditResult.reusedCount}
               </p>
             </div>
             <div className="rounded-vault-card border border-blue-400/20 bg-blue-500/10 p-4">
-              <p className="text-xs text-blue-200/70">No URL</p>
-              <p className="mt-2 font-display text-2xl font-medium text-blue-100">
+              <p className="text-xs text-blue-700 dark:text-blue-200/70">No URL</p>
+              <p className="mt-2 font-display text-2xl font-medium text-blue-800 dark:text-blue-100">
                 {auditResult.missingUrlCount}
               </p>
             </div>
@@ -210,8 +210,8 @@ export function SecurityAuditSection() {
             </div>
           ) : (
             <div className="rounded-vault-card border border-emerald-400/20 bg-emerald-500/10 p-4">
-              <p className="text-sm font-medium text-emerald-100">No issues found.</p>
-              <p className="mt-1 text-sm text-emerald-100/75">
+              <p className="text-sm font-medium text-emerald-800 dark:text-emerald-100">No issues found.</p>
+              <p className="mt-1 text-sm text-emerald-800/75 dark:text-emerald-100/75">
                 Your saved passwords look strong based on local checks.
               </p>
             </div>

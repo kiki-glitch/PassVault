@@ -21,10 +21,10 @@ export function SettingsSection() {
         </p>
 
         <div className="mt-5 rounded-vault-card border border-yellow-300/20 bg-yellow-500/10 p-4">
-          <p className="text-sm font-semibold text-yellow-100">
+          <p className="text-sm font-semibold text-yellow-900 dark:text-yellow-100">
             Zero-knowledge reminder
           </p>
-          <p className="mt-2 text-sm leading-6 text-yellow-100/80">
+          <p className="mt-2 text-sm leading-6 text-yellow-900/80 dark:text-yellow-100/80">
             Your vault master password is not stored anywhere. Account recovery
             through Clerk does not recover encrypted vault data.
           </p>

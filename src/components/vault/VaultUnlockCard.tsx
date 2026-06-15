@@ -172,8 +172,8 @@ export function VaultUnlockCard() {
     return (
       <div className="mb-6 flex items-center justify-between rounded-vault-card border border-emerald-300/15 bg-emerald-500/[0.06] px-5 py-3.5">
         <div>
-          <p className="text-sm font-medium text-emerald-300">Vault unlocked</p>
-          <p className="mt-0.5 text-xs text-emerald-300/55">
+          <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">Vault unlocked</p>
+          <p className="mt-0.5 text-xs text-emerald-800/55 dark:text-emerald-300/55">
             Key active in browser memory · auto-locks after{" "}
             {Math.round(autoLockDurationMs / 60000)} min
             {lastActivityAt &&
@@ -186,7 +186,7 @@ export function VaultUnlockCard() {
         <button
           type="button"
           onClick={lockVault}
-          className="rounded-vault-chip border border-emerald-300/20 px-4 py-1.5 text-xs font-medium text-emerald-200/75 transition hover:bg-emerald-300/10"
+          className="rounded-vault-chip border border-emerald-300/20 px-4 py-1.5 text-xs font-medium text-emerald-800 dark:text-emerald-200/75 transition hover:bg-emerald-300/10"
         >
           Lock
         </button>
