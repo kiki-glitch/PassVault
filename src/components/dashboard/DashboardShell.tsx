@@ -45,6 +45,18 @@ const navItems: {
   },
 ];
 
+// Shared class strings — mirrors VaultUnlockCard's pattern
+const panelCls =
+  "rounded-vault-panel border border-white/8 bg-vault-card shadow-2xl shadow-black/40";
+
+const navItemBaseCls =
+  "w-full rounded-vault-chip px-3 py-2.5 text-left transition";
+
+const navItemActiveCls = "border border-vault-accent/20 bg-vault-accent/[0.08]";
+
+const navItemInactiveCls =
+  "border border-transparent hover:bg-white/[0.04]";
+
 export function DashboardShell({
   passwordsSection,
   notesSection,
@@ -56,21 +68,25 @@ export function DashboardShell({
     useState<DashboardSection>("passwords");
 
   return (
-    <main className="min-h-screen bg-[#090812] text-white">
+    <main className="min-h-screen bg-vault-bg text-white">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-4 lg:grid-cols-[280px_1fr] lg:px-6 lg:py-6">
-        <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-2xl shadow-pink-500/5 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
-          <div className="flex items-center gap-3 border-b border-white/10 pb-5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-pink-300/30 bg-white/10 text-2xl font-bold text-pink-300 shadow-lg shadow-pink-500/20">
+
+        {/* ── Sidebar ────────────────────────────────────────────────────── */}
+        <aside
+          className={`flex flex-col p-5 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] ${panelCls}`}
+        >
+          {/* Persistent identity: monogram + app name */}
+          <div className="flex items-center gap-3 border-b border-white/8 pb-5">
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-vault-chip bg-vault-accent/10 font-display text-sm font-medium text-vault-accent">
               {bMemoryVaultTheme.ownerInitial}
             </div>
-
-            <div>
-              <p className="text-sm text-slate-400">Private vault</p>
-              <h1 className="text-lg font-bold">{bMemoryVaultTheme.appName}</h1>
-            </div>
+            <p className="font-display text-sm font-medium text-white/70">
+              {bMemoryVaultTheme.appName}
+            </p>
           </div>
 
-          <nav className="mt-5 grid gap-2">
+          {/* Navigation */}
+          <nav className="mt-5 flex flex-col gap-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
 
@@ -79,20 +95,18 @@ export function DashboardShell({
                   key={item.id}
                   type="button"
                   onClick={() => setActiveSection(item.id)}
-                  className={`rounded-2xl px-4 py-3 text-left transition ${
-                    isActive
-                      ? "border border-pink-300/30 bg-pink-400/15 shadow-lg shadow-pink-500/10"
-                      : "border border-transparent hover:bg-white/5"
+                  className={`${navItemBaseCls} ${
+                    isActive ? navItemActiveCls : navItemInactiveCls
                   }`}
                 >
                   <p
-                    className={`text-sm font-semibold ${
-                      isActive ? "text-pink-200" : "text-slate-200"
+                    className={`text-sm font-medium ${
+                      isActive ? "text-vault-accent" : "text-white/55"
                     }`}
                   >
                     {item.label}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-0.5 text-xs text-white/30">
                     {item.description}
                   </p>
                 </button>
@@ -100,26 +114,34 @@ export function DashboardShell({
             })}
           </nav>
 
-          <div className="mt-5 rounded-2xl border border-blue-300/20 bg-blue-500/10 p-4">
-            <p className="text-sm font-semibold text-blue-200">
-              Zero-knowledge vault
-            </p>
-            <p className="mt-2 text-xs leading-5 text-blue-100/70">
-              Passwords and notes are decrypted only in this browser after vault
-              unlock.
-            </p>
+          {/* ZK callout — pinned to bottom */}
+          <div className="mt-auto border-t border-white/8 pt-5">
+            <div className="rounded-vault-chip border border-vault-support/15 bg-vault-support/[0.06] px-4 py-3">
+              <p className="text-xs font-medium text-vault-support">
+                Zero-knowledge vault
+              </p>
+              <p className="mt-1.5 text-xs leading-relaxed text-vault-support/55">
+                Passwords and notes are decrypted only in this browser after
+                vault unlock.
+              </p>
+            </div>
           </div>
         </aside>
 
+        {/* ── Main content ───────────────────────────────────────────────── */}
         <section className="min-w-0">
-          <header className="mb-6 rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-xl shadow-blue-500/5">
+
+          {/* Dashboard greeting header */}
+          <header className={`mb-6 p-5 ${panelCls}`}>
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
-                <p className="text-sm text-pink-300">{bMemoryVaultTheme.copy.dashboardEyebrow}</p>
-                <h2 className="mt-2 text-2xl font-bold md:text-3xl">
+                <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
+                  {bMemoryVaultTheme.copy.dashboardEyebrow}
+                </p>
+                <h2 className="mt-2 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
                   {bMemoryVaultTheme.copy.dashboardGreeting}
                 </h2>
-                <p className="mt-2 text-sm text-slate-400">
+                <p className="mt-2 text-sm text-white/45">
                   {bMemoryVaultTheme.copy.dashboardSubtitle}
                 </p>
               </div>
@@ -129,27 +151,12 @@ export function DashboardShell({
           </header>
 
           {activeSection === "passwords" && passwordsSection}
-
           {activeSection === "notes" && notesSection}
-
           {activeSection === "generator" && generatorSection}
-
           {activeSection === "security" && securitySection}
-
-          {/* {activeSection === "settings" && (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-sm text-blue-300">Settings</p>
-              <h2 className="mt-2 text-2xl font-bold">Vault settings</h2>
-              <p className="mt-2 text-sm text-slate-400">
-                Settings will come in the next phases: auto-lock, theme options,
-                account security, and vault backup.
-              </p>
-            </div>
-          )} */}
-
-            {activeSection === "settings" && settingsSection}
-
+          {activeSection === "settings" && settingsSection}
         </section>
+
       </div>
     </main>
   );

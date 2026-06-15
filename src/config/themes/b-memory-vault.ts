@@ -58,6 +58,7 @@ export const bMemoryVaultTheme = {
   },
 
   radius: {
+    panel: "24px",
     card: "16px",
     input: "12px",
     chip: "8px",

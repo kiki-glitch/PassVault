@@ -15,6 +15,7 @@ export type ThemeFonts = {
 };
 
 export type ThemeRadius = {
+  panel: string;
   card: string;
   input: string;
   chip: string;

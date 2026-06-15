@@ -16,6 +16,7 @@
   --color-vault-support: var(--vault-support);
 
   /* Radius tokens */
+  --radius-vault-panel: var(--vault-radius-panel);
   --radius-vault-card: var(--vault-radius-card);
   --radius-vault-input: var(--vault-radius-input);
   --radius-vault-chip: var(--vault-radius-chip);

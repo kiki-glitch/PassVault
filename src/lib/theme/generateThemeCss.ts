@@ -11,6 +11,7 @@ export function generateThemeCss(theme: Theme): string {
   --vault-blue: ${colors.blue};
   --vault-accent: ${colors.accent};
   --vault-support: ${colors.support};
+  --vault-radius-panel: ${radius.panel};
   --vault-radius-card: ${radius.card};
   --vault-radius-input: ${radius.input};
   --vault-radius-chip: ${radius.chip};
