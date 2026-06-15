@@ -20,6 +20,17 @@ const initialFormValues: VaultItemFormValues = {
   favorite: false,
 };
 
+const inputCls =
+  "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
+  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+
+const labelCls = "text-xs font-medium text-white/50";
+
+const submitBtnCls =
+  "mt-6 w-full rounded-vault-input bg-vault-accent px-8 py-3 text-sm font-semibold " +
+  "text-slate-950 transition hover:opacity-90 sm:w-auto " +
+  "disabled:cursor-not-allowed disabled:opacity-60";
+
 export function AddPasswordForm({
   onCreated,
 }: {
@@ -53,7 +64,7 @@ export function AddPasswordForm({
     return createVault({
       profileId,
       getToken,
-      name: "B’s Main Vault",
+      name: "B's Main Vault",
       description: "Default vault for saved keys.",
     });
   }
@@ -132,96 +143,95 @@ export function AddPasswordForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6"
+      className="mt-6 rounded-vault-panel border border-white/8 bg-vault-card p-6"
     >
       <div>
-        <p className="text-sm text-pink-300">{bMemoryVaultTheme.labels.passwords}</p>
-        <h2 className="mt-2 text-2xl font-bold">Add a password</h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
+          {bMemoryVaultTheme.labels.passwords}
+        </p>
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+          Add a password
+        </h2>
+        <p className="mt-1.5 text-sm text-white/45">
           This form encrypts the password in your browser before saving it.
         </p>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Title</span>
+        <label className="grid gap-1.5">
+          <span className={labelCls}>Title</span>
           <input
             value={values.title}
             onChange={(event) => updateField("title", event.target.value)}
-            className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
+            className={inputCls}
             placeholder="Netflix"
           />
         </label>
 
-        <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Username / Email</span>
+        <label className="grid gap-1.5">
+          <span className={labelCls}>Username / Email</span>
           <input
             value={values.username}
             onChange={(event) => updateField("username", event.target.value)}
-            className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
+            className={inputCls}
             placeholder="b@example.com"
           />
         </label>
 
-        <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Password</span>
-
+        <label className="grid gap-1.5">
+          <span className={labelCls}>Password</span>
           <div className="flex gap-2">
             <input
               type="password"
               value={values.password}
               onChange={(event) => updateField("password", event.target.value)}
-              className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
+              className={inputCls + " min-w-0 flex-1"}
               placeholder="Enter password"
             />
-
             <button
               type="button"
               onClick={handleGeneratePassword}
-              className="rounded-2xl border border-blue-300/30 px-4 py-3 text-sm font-semibold text-blue-200 transition hover:bg-blue-300/10"
+              className="rounded-vault-input border border-vault-support/20 px-4 py-3 text-sm font-medium text-vault-support/70 transition hover:bg-vault-support/[0.06]"
             >
               Generate
             </button>
           </div>
         </label>
 
-        <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Website URL</span>
+        <label className="grid gap-1.5">
+          <span className={labelCls}>Website URL</span>
           <input
             value={values.url}
             onChange={(event) => updateField("url", event.target.value)}
-            className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
+            className={inputCls}
             placeholder="https://example.com"
           />
         </label>
 
-        <label className="grid gap-2 md:col-span-2">
-          <span className="text-sm text-slate-300">Notes</span>
+        <label className="grid gap-1.5 md:col-span-2">
+          <span className={labelCls}>Notes</span>
           <textarea
             value={values.notes}
             onChange={(event) => updateField("notes", event.target.value)}
-            className="min-h-24 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-pink-300"
+            className={inputCls + " min-h-20 resize-none"}
             placeholder="Optional note"
           />
         </label>
 
-        <label className="flex items-center gap-3 text-sm text-slate-300">
+        <label className="flex items-center gap-3 text-sm text-white/45">
           <input
             type="checkbox"
             checked={values.favorite}
             onChange={(event) => updateField("favorite", event.target.checked)}
+            className="accent-[var(--vault-accent)]"
           />
           Mark as favorite
         </label>
       </div>
 
-      {message && <p className="mt-4 text-sm text-blue-200">{message}</p>}
+      {message && <p className="mt-4 text-xs text-white/45">{message}</p>}
 
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="mt-6 rounded-full bg-pink-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-pink-300 disabled:cursor-not-allowed disabled:opacity-60"
-      >
+      <button type="submit" disabled={isSaving} className={submitBtnCls}>
         {isSaving ? "Saving..." : "Save Password"}
       </button>
     </form>
