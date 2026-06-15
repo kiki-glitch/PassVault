@@ -22,9 +22,9 @@ const initialFormValues: VaultItemFormValues = {
 
 const inputCls =
   "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
-  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+  "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
-const labelCls = "text-xs font-medium text-white/50";
+const labelCls = "text-xs font-medium text-vault-text-muted";
 
 const submitBtnCls =
   "mt-6 w-full rounded-vault-input bg-vault-accent px-8 py-3 text-sm font-semibold " +
@@ -149,10 +149,10 @@ export function AddPasswordForm({
         <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
           {bMemoryVaultTheme.labels.passwords}
         </p>
-        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
           Add a password
         </h2>
-        <p className="mt-1.5 text-sm text-white/45">
+        <p className="mt-1.5 text-sm text-vault-text-muted">
           This form encrypts the password in your browser before saving it.
         </p>
       </div>
@@ -218,7 +218,7 @@ export function AddPasswordForm({
           />
         </label>
 
-        <label className="flex items-center gap-3 text-sm text-white/45">
+        <label className="flex items-center gap-3 text-sm text-vault-text-muted">
           <input
             type="checkbox"
             checked={values.favorite}
@@ -229,7 +229,7 @@ export function AddPasswordForm({
         </label>
       </div>
 
-      {message && <p className="mt-4 text-xs text-white/45">{message}</p>}
+      {message && <p className="mt-4 text-xs text-vault-text-muted">{message}</p>}
 
       <button type="submit" disabled={isSaving} className={submitBtnCls}>
         {isSaving ? "Saving..." : "Save Password"}

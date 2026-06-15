@@ -7,6 +7,12 @@ export type ThemeColors = {
   lightCard: string;
   accent: string;
   support: string;
+  foreground: string;
+  foregroundMuted: string;
+  foregroundFaint: string;
+  darkForeground: string;
+  darkForegroundMuted: string;
+  darkForegroundFaint: string;
 };
 
 export type ThemeFonts = {

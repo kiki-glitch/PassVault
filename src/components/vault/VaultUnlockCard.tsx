@@ -16,7 +16,7 @@ type VaultMode = "loading" | "setup" | "unlock";
 // Shared class strings — every token comes from the theme system
 const inputCls =
   "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
-  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+  "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const primaryBtnCls =
   "mt-1 w-full rounded-vault-input bg-vault-accent py-3 text-sm font-semibold " +
@@ -202,7 +202,7 @@ export function VaultUnlockCard() {
           <div className="flex h-11 w-11 animate-pulse items-center justify-center rounded-vault-chip bg-vault-accent/10 font-display text-xl font-medium text-vault-accent">
             {bMemoryVaultTheme.ownerInitial}
           </div>
-          <p className="text-xs text-white/35">Preparing your vault…</p>
+          <p className="text-xs text-vault-text-faint">Preparing your vault…</p>
         </div>
       </div>
     );
@@ -225,16 +225,16 @@ export function VaultUnlockCard() {
           {monogram}
 
           <div className="mb-6 text-center">
-            <h1 className="font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+            <h1 className="font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
               {bMemoryVaultTheme.copy.setupTitle}
             </h1>
-            <p className="mt-2 text-sm leading-relaxed text-white/45">
+            <p className="mt-2 text-sm leading-relaxed text-vault-text-muted">
               {bMemoryVaultTheme.copy.setupSubtitle}
             </p>
           </div>
 
           <div className="mb-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
-            <p className="text-xs leading-relaxed text-white/40">
+            <p className="text-xs leading-relaxed text-vault-text-muted">
               {bMemoryVaultTheme.copy.setupNotice}
             </p>
           </div>
@@ -262,7 +262,7 @@ export function VaultUnlockCard() {
 
             {error && <p className="text-xs text-red-400/80">{error}</p>}
             {infoMessage && (
-              <p className="text-xs text-white/45">{infoMessage}</p>
+              <p className="text-xs text-vault-text-muted">{infoMessage}</p>
             )}
 
             <button
@@ -285,10 +285,10 @@ export function VaultUnlockCard() {
         {monogram}
 
         <div className="mb-7 text-center">
-          <h1 className="font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+          <h1 className="font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
             {bMemoryVaultTheme.copy.unlockTitle}
           </h1>
-          <p className="mt-2 text-sm text-white/45">
+          <p className="mt-2 text-sm text-vault-text-muted">
             {bMemoryVaultTheme.copy.unlockSubtitle}
           </p>
         </div>
@@ -306,7 +306,7 @@ export function VaultUnlockCard() {
 
           {error && <p className="text-xs text-red-400/80">{error}</p>}
           {infoMessage && (
-            <p className="text-xs text-white/45">{infoMessage}</p>
+            <p className="text-xs text-vault-text-muted">{infoMessage}</p>
           )}
 
           <button
@@ -318,7 +318,7 @@ export function VaultUnlockCard() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs leading-relaxed text-white/30">
+        <p className="mt-6 text-center text-xs leading-relaxed text-vault-text-faint">
           Your master password never leaves this browser and cannot be
           recovered.
         </p>

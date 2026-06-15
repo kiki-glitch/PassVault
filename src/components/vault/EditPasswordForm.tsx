@@ -10,9 +10,9 @@ import { generatePassword } from "@/lib/crypto/passwordGenerator";
 
 const inputCls =
   "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
-  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+  "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
-const labelCls = "text-xs font-medium text-white/50";
+const labelCls = "text-xs font-medium text-vault-text-muted";
 
 export function EditPasswordForm({
   item,
@@ -114,7 +114,7 @@ export function EditPasswordForm({
         <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
           Editing
         </p>
-        <h3 className="mt-1 font-display text-base font-medium text-white">
+        <h3 className="mt-1 font-display text-base font-medium text-vault-text">
           {item.title}
         </h3>
       </div>
@@ -175,7 +175,7 @@ export function EditPasswordForm({
           />
         </label>
 
-        <label className="flex items-center gap-3 text-sm text-white/45">
+        <label className="flex items-center gap-3 text-sm text-vault-text-muted">
           <input
             type="checkbox"
             checked={values.favorite}
@@ -186,7 +186,7 @@ export function EditPasswordForm({
         </label>
       </div>
 
-      {message && <p className="mt-4 text-xs text-white/45">{message}</p>}
+      {message && <p className="mt-4 text-xs text-vault-text-muted">{message}</p>}
 
       <div className="mt-5 flex flex-wrap gap-3">
         <button
@@ -200,7 +200,7 @@ export function EditPasswordForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-vault-input border border-white/10 px-6 py-2.5 text-sm font-medium text-white/50 transition hover:bg-white/[0.04]"
+          className="rounded-vault-input border border-white/10 px-6 py-2.5 text-sm font-medium text-vault-text-muted transition hover:bg-white/[0.04]"
         >
           Cancel
         </button>

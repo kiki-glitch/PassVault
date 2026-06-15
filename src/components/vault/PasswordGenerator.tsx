@@ -25,7 +25,7 @@ function getStrengthBarStyles(label: string) {
     case "Strong":
       return { widthClass: "w-full", colorClass: "bg-emerald-400", textClass: "text-emerald-400" };
     default:
-      return { widthClass: "w-0",    colorClass: "bg-white/20",    textClass: "text-white/30" };
+      return { widthClass: "w-0",    colorClass: "bg-white/20",    textClass: "text-vault-text-faint" };
   }
 }
 
@@ -90,10 +90,10 @@ export function PasswordGenerator() {
         <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
           {bMemoryVaultTheme.labels.generator}
         </p>
-        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
           Generate a strong password
         </h2>
-        <p className="mt-1.5 text-sm text-white/45">
+        <p className="mt-1.5 text-sm text-vault-text-muted">
           Passwords are generated locally and are not sent anywhere.
         </p>
       </div>
@@ -103,7 +103,7 @@ export function PasswordGenerator() {
         {/* Length slider */}
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-white/50">Length</span>
+            <span className="text-xs font-medium text-vault-text-muted">Length</span>
             <span className="rounded-vault-chip border border-white/8 bg-black/30 px-2.5 py-1 text-xs font-medium text-vault-accent/70">
               {options.length}
             </span>
@@ -132,7 +132,7 @@ export function PasswordGenerator() {
           ).map(({ key, label }) => (
             <label
               key={key}
-              className="flex cursor-pointer items-center gap-3 rounded-vault-card border border-white/8 bg-black/20 p-3 text-sm text-white/55 transition has-[:checked]:border-vault-accent/20 has-[:checked]:bg-vault-accent/[0.05] has-[:checked]:text-white/80"
+              className="flex cursor-pointer items-center gap-3 rounded-vault-card border border-white/8 bg-black/20 p-3 text-sm text-vault-text-muted transition has-[:checked]:border-vault-accent/20 has-[:checked]:bg-vault-accent/[0.05] has-[:checked]:text-vault-text/80"
             >
               <input
                 type="checkbox"
@@ -157,21 +157,21 @@ export function PasswordGenerator() {
           <button
             type="button"
             onClick={handleCopy}
-            className="rounded-vault-input border border-white/10 px-6 py-3 text-sm font-medium text-white/55 transition hover:bg-white/[0.04] hover:text-white/80"
+            className="rounded-vault-input border border-white/10 px-6 py-3 text-sm font-medium text-vault-text-muted transition hover:bg-white/[0.04] hover:text-vault-text/80"
           >
             Copy
           </button>
         </div>
 
-        {message && <p className="text-xs text-white/45">{message}</p>}
+        {message && <p className="text-xs text-vault-text-muted">{message}</p>}
 
         {/* Output + strength */}
         {generatedPassword && (
           <div className="rounded-vault-card border border-white/8 bg-black/30 p-5">
-            <p className="text-xs font-medium uppercase tracking-widest text-white/30">
+            <p className="text-xs font-medium uppercase tracking-widest text-vault-text-faint">
               Generated password
             </p>
-            <p className="mt-3 break-all font-mono text-base leading-relaxed text-white">
+            <p className="mt-3 break-all font-mono text-base leading-relaxed text-vault-text">
               {generatedPassword}
             </p>
 
@@ -181,7 +181,7 @@ export function PasswordGenerator() {
                   <span className={`text-xs font-medium ${strengthStyles.textClass}`}>
                     {strength.label}
                   </span>
-                  <span className="text-xs text-white/30">{strength.description}</span>
+                  <span className="text-xs text-vault-text-faint">{strength.description}</span>
                 </div>
                 <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                   <div

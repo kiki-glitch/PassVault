@@ -106,16 +106,16 @@ export function SecurityAuditSection() {
         <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
           {bMemoryVaultTheme.labels.security}
         </p>
-        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+        <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
           Safety check
         </h2>
-        <p className="mt-1.5 text-sm text-white/45">{message}</p>
+        <p className="mt-1.5 text-sm text-vault-text-muted">{message}</p>
       </div>
 
       {/* Locked notice */}
       {!isUnlocked && (
         <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-vault-text-muted">
             Unlock your vault to analyze saved passwords locally.
           </p>
         </div>
@@ -124,7 +124,7 @@ export function SecurityAuditSection() {
       {/* Loading */}
       {isUnlocked && isLoading && (
         <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
-          <p className="text-xs text-white/40">Running local safety check...</p>
+          <p className="text-xs text-vault-text-muted">Running local safety check...</p>
         </div>
       )}
 
@@ -135,10 +135,10 @@ export function SecurityAuditSection() {
           <div className="rounded-vault-card border border-white/8 bg-black/30 p-5">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
-                <p className="text-xs font-medium text-white/40">Vault security score</p>
-                <p className="mt-1 font-display text-4xl font-medium text-white">
+                <p className="text-xs font-medium text-vault-text-faint">Vault security score</p>
+                <p className="mt-1 font-display text-4xl font-medium text-vault-text">
                   {auditResult.score}
-                  <span className="ml-0.5 text-xl text-white/30">/100</span>
+                  <span className="ml-0.5 text-xl text-vault-text-faint">/100</span>
                 </p>
                 <p className={`mt-1 text-sm font-medium ${
                   auditResult.score >= 85 ? "text-emerald-400" :
@@ -161,8 +161,8 @@ export function SecurityAuditSection() {
           {/* Stat cards */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
             <div className="rounded-vault-card border border-white/8 bg-vault-card p-4">
-              <p className="text-xs text-white/40">Saved keys</p>
-              <p className="mt-2 font-display text-2xl font-medium text-white">
+              <p className="text-xs text-vault-text-faint">Saved keys</p>
+              <p className="mt-2 font-display text-2xl font-medium text-vault-text">
                 {auditResult.totalItems}
               </p>
             </div>
@@ -195,7 +195,7 @@ export function SecurityAuditSection() {
           {/* Issues */}
           {auditResult.issues.length > 0 ? (
             <div className="grid gap-3">
-              <h3 className="font-display text-base font-medium text-white">
+              <h3 className="font-display text-base font-medium text-vault-text">
                 Issues found
               </h3>
               {auditResult.issues.map((issue, index) => (

@@ -11,6 +11,9 @@ export function generateThemeCss(theme: Theme): string {
   --vault-blue: ${colors.blue};
   --vault-accent: ${colors.accent};
   --vault-support: ${colors.support};
+  --vault-text: ${colors.foreground};
+  --vault-text-muted: ${colors.foregroundMuted};
+  --vault-text-faint: ${colors.foregroundFaint};
   --vault-radius-panel: ${radius.panel};
   --vault-radius-card: ${radius.card};
   --vault-radius-input: ${radius.input};
@@ -21,5 +24,8 @@ export function generateThemeCss(theme: Theme): string {
 .dark {
   --vault-bg: ${colors.darkBackground};
   --vault-card: ${colors.darkCard};
+  --vault-text: ${colors.darkForeground};
+  --vault-text-muted: ${colors.darkForegroundMuted};
+  --vault-text-faint: ${colors.darkForegroundFaint};
 }`.trim();
 }

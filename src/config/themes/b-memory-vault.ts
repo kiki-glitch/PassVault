@@ -50,6 +50,12 @@ export const bMemoryVaultTheme = {
     lightCard: "#ffffff",
     accent: "#f472b6",
     support: "#60a5fa",
+    foreground: "#1a1628",
+    foregroundMuted: "#655f7e",
+    foregroundFaint: "#736f8c",
+    darkForeground: "#ffffff",
+    darkForegroundMuted: "#85838f",
+    darkForegroundFaint: "#545162",
   },
 
   fonts: {

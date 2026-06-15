@@ -25,11 +25,11 @@ function relativeDate(iso: string): string {
 
 const inputCls =
   "w-full rounded-vault-input border border-white/10 bg-black/30 px-4 py-3 text-sm " +
-  "text-white placeholder:text-white/25 outline-none transition focus:border-vault-accent/50";
+  "text-vault-text placeholder:text-vault-text-faint outline-none transition focus:border-vault-accent/50";
 
 const actionBtnCls =
   "rounded-vault-chip border border-white/8 px-2.5 py-1 text-xs font-medium " +
-  "text-white/55 transition hover:bg-white/[0.06] hover:text-white/80";
+  "text-vault-text-muted transition hover:bg-white/[0.06] hover:text-vault-text/80";
 
 export function SecureNoteList({
   refreshKey,
@@ -136,10 +136,10 @@ export function SecureNoteList({
           <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
             {bMemoryVaultTheme.labels.notes}
           </p>
-          <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+          <h2 className="mt-1 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
             {bMemoryVaultTheme.labels.notes}
           </h2>
-          <p className="mt-1.5 text-sm text-white/45">{message}</p>
+          <p className="mt-1.5 text-sm text-vault-text-muted">{message}</p>
         </div>
 
         <label className="lg:w-72">
@@ -156,7 +156,7 @@ export function SecureNoteList({
       {/* Defense-in-depth locked notice */}
       {!isUnlocked && (
         <div className="mt-5 rounded-vault-chip border border-white/8 bg-white/[0.03] px-4 py-3">
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-vault-text-muted">
             Unlock the vault to view and search secure notes.
           </p>
         </div>
@@ -165,10 +165,10 @@ export function SecureNoteList({
       {/* Empty states */}
       {isUnlocked && notes.length === 0 && (
         <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
-          <p className="font-display text-base font-medium text-white/70">
+          <p className="font-display text-base font-medium text-vault-text/70">
             No secure notes yet.
           </p>
-          <p className="mt-1.5 text-sm text-white/35">
+          <p className="mt-1.5 text-sm text-vault-text-faint">
             Add your first private note using the form below.
           </p>
         </div>
@@ -176,10 +176,10 @@ export function SecureNoteList({
 
       {isUnlocked && notes.length > 0 && filteredNotes.length === 0 && (
         <div className="mt-5 rounded-vault-card border border-white/8 bg-vault-card p-8 text-center">
-          <p className="font-display text-base font-medium text-white/70">
+          <p className="font-display text-base font-medium text-vault-text/70">
             No matches found.
           </p>
-          <p className="mt-1.5 text-sm text-white/35">
+          <p className="mt-1.5 text-sm text-vault-text-faint">
             Try searching by note title or content.
           </p>
         </div>
@@ -211,7 +211,7 @@ export function SecureNoteList({
             >
               {/* Title + favorite heart */}
               <div className="flex items-start gap-2">
-                <h3 className="flex-1 font-display text-base font-medium leading-snug text-white">
+                <h3 className="flex-1 font-display text-base font-medium leading-snug text-vault-text">
                   {note.title}
                 </h3>
                 {note.favorite && (
@@ -227,13 +227,13 @@ export function SecureNoteList({
               </div>
 
               {/* Content preview — prose treatment */}
-              <p className="mt-2.5 line-clamp-4 text-sm leading-relaxed text-white/55">
+              <p className="mt-2.5 line-clamp-4 text-sm leading-relaxed text-vault-text-muted">
                 {note.content}
               </p>
 
               {/* Timestamp + actions */}
               <div className="mt-auto flex items-center justify-between pt-4">
-                <span className="text-xs text-white/30">
+                <span className="text-xs text-vault-text-faint">
                   added {relativeDate(note.createdAt)}
                 </span>
 

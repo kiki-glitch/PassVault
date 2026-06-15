@@ -71,7 +71,7 @@ export function DashboardShell({
   const { isUnlocked } = useVault();
 
   return (
-    <main className="min-h-screen bg-vault-bg text-white">
+    <main className="min-h-screen bg-vault-bg text-vault-text">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-4 lg:grid-cols-[280px_1fr] lg:px-6 lg:py-6">
 
         {/* ── Sidebar ────────────────────────────────────────────────────── */}
@@ -83,7 +83,7 @@ export function DashboardShell({
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-vault-chip bg-vault-accent/10 font-display text-sm font-medium text-vault-accent">
               {bMemoryVaultTheme.ownerInitial}
             </div>
-            <p className="font-display text-sm font-medium text-white/70">
+            <p className="font-display text-sm font-medium text-vault-text/70">
               {bMemoryVaultTheme.appName}
             </p>
           </div>
@@ -104,12 +104,12 @@ export function DashboardShell({
                 >
                   <p
                     className={`text-sm font-medium ${
-                      isActive ? "text-vault-accent" : "text-white/55"
+                      isActive ? "text-vault-accent" : "text-vault-text-muted"
                     }`}
                   >
                     {item.label}
                   </p>
-                  <p className="mt-0.5 text-xs text-white/30">
+                  <p className="mt-0.5 text-xs text-vault-text-faint">
                     {item.description}
                   </p>
                 </button>
@@ -144,10 +144,10 @@ export function DashboardShell({
                     <p className="text-xs font-medium uppercase tracking-widest text-vault-accent/60">
                       {bMemoryVaultTheme.copy.dashboardEyebrow}
                     </p>
-                    <h2 className="mt-2 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-white">
+                    <h2 className="mt-2 font-display text-[1.65rem] font-medium leading-tight tracking-tight text-vault-text">
                       {bMemoryVaultTheme.copy.dashboardGreeting}
                     </h2>
-                    <p className="mt-2 text-sm text-white/45">
+                    <p className="mt-2 text-sm text-vault-text-muted">
                       {bMemoryVaultTheme.copy.dashboardSubtitle}
                     </p>
                   </div>

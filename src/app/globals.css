@@ -14,6 +14,9 @@
   --color-vault-blue: var(--vault-blue);
   --color-vault-accent: var(--vault-accent);
   --color-vault-support: var(--vault-support);
+  --color-vault-text: var(--vault-text);
+  --color-vault-text-muted: var(--vault-text-muted);
+  --color-vault-text-faint: var(--vault-text-faint);
 
   /* Radius tokens */
   --radius-vault-panel: var(--vault-radius-panel);
