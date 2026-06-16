@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { SignOutButton, UserButton } from "@clerk/nextjs";
 import { bMemoryVaultTheme } from "@/config/themes";
 import { useVault } from "@/components/vault/VaultProvider";
 import { VaultUnlockCard } from "@/components/vault/VaultUnlockCard";
@@ -121,7 +121,7 @@ export function DashboardShell({
             })}
           </nav>
 
-          {/* ZK callout — pinned to bottom */}
+          {/* ZK callout + sign-out — pinned to bottom */}
           <div className="mt-auto border-t border-vault-border pt-5">
             <div className="rounded-vault-chip border border-vault-support/15 bg-vault-support/[0.06] px-4 py-3">
               <p className="text-xs font-medium text-vault-support">
@@ -132,6 +132,24 @@ export function DashboardShell({
                 vault unlock.
               </p>
             </div>
+            <SignOutButton>
+              <button
+                type="button"
+                className="mt-3 flex w-full items-center gap-2.5 rounded-vault-chip border border-vault-border px-3 py-2.5 text-left text-sm font-medium text-vault-text-muted transition hover:bg-vault-overlay/[0.04] hover:text-vault-text"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-4 w-4 flex-shrink-0"
+                  aria-hidden="true"
+                >
+                  <path d="M3 4a1 1 0 011-1h5a1 1 0 110 2H5v10h4a1 1 0 110 2H4a1 1 0 01-1-1V4z" />
+                  <path d="M12.293 6.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L13.586 11H8a1 1 0 110-2h5.586l-1.293-1.293a1 1 0 010-1.414z" />
+                </svg>
+                Sign out
+              </button>
+            </SignOutButton>
           </div>
         </aside>
 
