@@ -153,6 +153,7 @@ export function VaultItemList() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, user, isUnlocked, vaultKey, refreshKey]);

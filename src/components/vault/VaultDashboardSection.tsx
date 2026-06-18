@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AddPasswordForm } from "./AddPasswordForm";
+import { CsvImportPanel } from "./CsvImportPanel";
 import { VaultItemList } from "./VaultItemList";
 
 export function VaultDashboardSection(){
@@ -15,6 +16,7 @@ export function VaultDashboardSection(){
         <>
             <VaultItemList key={refreshKey} />
             <AddPasswordForm onCreated={handleCreated} />
+            <CsvImportPanel onImported={handleCreated} />
         </>
     );
 }

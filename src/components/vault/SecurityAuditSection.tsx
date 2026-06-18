@@ -94,6 +94,7 @@ export function SecurityAuditSection() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadItemsForAudit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, user, isUnlocked, vaultKey]);

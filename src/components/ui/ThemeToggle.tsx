@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    // Sync icon state from the class applied by the head script
-    setIsDark(document.documentElement.classList.contains("dark"));
-  }, []);
+  const [isDark, setIsDark] = useState(() =>
+    typeof document === "undefined"
+      ? true
+      : document.documentElement.classList.contains("dark")
+  );
 
   function toggle() {
     const root = document.documentElement;
